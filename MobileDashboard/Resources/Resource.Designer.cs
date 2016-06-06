@@ -60,8 +60,32 @@ namespace MobileDashboard
 		public partial class Id
 		{
 			
+			// aapt resource value: 0x7f050002
+			public const int SignInBtn = 2131034114;
+			
+			// aapt resource value: 0x7f050008
+			public const int gotoMcolAlertsBtn = 2131034120;
+			
+			// aapt resource value: 0x7f050007
+			public const int gotoMcolDashBtn = 2131034119;
+			
+			// aapt resource value: 0x7f050006
+			public const int gotoRagBtn = 2131034118;
+			
+			// aapt resource value: 0x7f050003
+			public const int incorrectPwdText = 2131034115;
+			
+			// aapt resource value: 0x7f050001
+			public const int passwordText = 2131034113;
+			
+			// aapt resource value: 0x7f050005
+			public const int textView1 = 2131034117;
+			
+			// aapt resource value: 0x7f050004
+			public const int userLabel = 2131034116;
+			
 			// aapt resource value: 0x7f050000
-			public const int MyButton = 2131034112;
+			public const int userNameTxt = 2131034112;
 			
 			static Id()
 			{
@@ -78,6 +102,9 @@ namespace MobileDashboard
 			
 			// aapt resource value: 0x7f030000
 			public const int Main = 2130903040;
+			
+			// aapt resource value: 0x7f030001
+			public const int Menu = 2130903041;
 			
 			static Layout()
 			{

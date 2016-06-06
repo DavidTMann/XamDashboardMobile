@@ -10,8 +10,7 @@ namespace MobileDashboard
 {
     [Activity(Label = "MobileDashboard", MainLauncher = true, Icon = "@drawable/icon")]
     public class MainActivity : Activity
-    {
-        int count = 1;
+    {       
 
         protected override void OnCreate(Bundle bundle)
         {
@@ -22,9 +21,31 @@ namespace MobileDashboard
 
             // Get our button from the layout resource,
             // and attach an event to it
-            Button button = FindViewById<Button>(Resource.Id.MyButton);
+            Button signInBtn = FindViewById<Button>(Resource.Id.SignInBtn);
 
-            button.Click += delegate { button.Text = string.Format("{0} clicks!", count++); };
+            //username field
+            TextView user = FindViewById<TextView>(Resource.Id.userNameTxt);
+            
+            //pwd field
+            TextView pwd = FindViewById<TextView>(Resource.Id.passwordText);
+
+            //incorrect credentials txt box
+            var incorrectCredTxt = FindViewById<TextView>(Resource.Id.incorrectPwdText);
+            
+            signInBtn.Click += delegate {
+                if (!(user.Text == "aylingw" && pwd.Text == "password") || user.Text == string.Empty && pwd.Text == string.Empty)
+                {                    
+                    //Show error message
+                    incorrectCredTxt.Visibility = ViewStates.Visible;
+                }
+                else
+                {
+                    //Go to menu dashboard page                    
+                    Intent menu = new Intent(this.ApplicationContext, typeof(MenuActivity));
+                    menu.PutExtra("user", user.Text);
+                    StartActivity(menu);
+                }
+            };
         }
     }
 }
