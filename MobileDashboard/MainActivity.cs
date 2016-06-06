@@ -25,27 +25,34 @@ namespace MobileDashboard
 
             //username field
             TextView user = FindViewById<TextView>(Resource.Id.userNameTxt);
-            
+            user.SetSingleLine();
             //pwd field
             TextView pwd = FindViewById<TextView>(Resource.Id.passwordText);
+            user.SetSingleLine();
 
             //incorrect credentials txt box
             var incorrectCredTxt = FindViewById<TextView>(Resource.Id.incorrectPwdText);
             
-            signInBtn.Click += delegate {
-                if (!(user.Text == "aylingw" && pwd.Text == "password") || user.Text == string.Empty && pwd.Text == string.Empty)
-                {                    
-                    //Show error message
-                    incorrectCredTxt.Visibility = ViewStates.Visible;
-                }
-                else
-                {
-                    //Go to menu dashboard page                    
-                    Intent menu = new Intent(this.ApplicationContext, typeof(MenuActivity));
-                    menu.PutExtra("user", user.Text);
-                    StartActivity(menu);
-                }
+            signInBtn.Click += delegate
+            {
+                ValidateUser(user, pwd, incorrectCredTxt);
             };
+        }
+
+        private void ValidateUser(TextView user, TextView pwd, TextView incorrectCredTxt)
+        {
+            if (!(user.Text == "aylingw" && pwd.Text == "password") || user.Text == string.Empty && pwd.Text == string.Empty)
+            {
+                //Show error message
+                incorrectCredTxt.Visibility = ViewStates.Visible;
+            }
+            else
+            {
+                //Go to menu dashboard page                    
+                Intent menu = new Intent(this.ApplicationContext, typeof(MenuActivity));
+                menu.PutExtra("user", user.Text);
+                StartActivity(menu);
+            }
         }
     }
 }

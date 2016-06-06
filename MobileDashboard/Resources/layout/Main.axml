@@ -6,12 +6,14 @@
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/userNameTxt" />
+        android:id="@+id/userNameTxt"
+        android:singleLine="true" />
     <EditText
         android:inputType="textPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/passwordText" />
+        android:id="@+id/passwordText"
+        android:singleLine="true" />
     <Button
         android:text="Sign In"
         android:layout_width="match_parent"

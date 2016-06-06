@@ -78,6 +78,9 @@ namespace MobileDashboard
 			// aapt resource value: 0x7f050001
 			public const int passwordText = 2131034113;
 			
+			// aapt resource value: 0x7f050009
+			public const int ragTitle = 2131034121;
+			
 			// aapt resource value: 0x7f050005
 			public const int textView1 = 2131034117;
 			
@@ -105,6 +108,9 @@ namespace MobileDashboard
 			
 			// aapt resource value: 0x7f030001
 			public const int Menu = 2130903041;
+			
+			// aapt resource value: 0x7f030002
+			public const int RAG = 2130903042;
 			
 			static Layout()
 			{

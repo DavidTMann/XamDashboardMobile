@@ -35,7 +35,15 @@ namespace MobileDashboard
             else
             {
                 userLabel.Text += userTxt + "!";
-            }            
+            }
+
+            Button ragBtn = FindViewById<Button>(Resource.Id.gotoRagBtn);
+            ragBtn.Click += delegate
+            {
+                //Go to rag application page                    
+                Intent rag = new Intent(this.ApplicationContext, typeof(RAGActivity));
+                StartActivity(rag);
+            };          
         }
     }
 }
