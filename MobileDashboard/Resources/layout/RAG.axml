@@ -6,10 +6,18 @@
     android:minWidth="25px"
     android:minHeight="25px">
     <TextView
-        android:text="Application RAG status"
+        android:text="Application    RAG                  BU"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/ragTitle"
-        android:gravity="center" />
+        android:gravity="left"
+        android:textSize="13dp"
+        android:background="@android:color/background_light"
+        android:textColor="@android:color/black" />
+    <ListView
+        android:id="@+id/listView"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@android:color/darker_gray" />
 </LinearLayout>

@@ -60,6 +60,15 @@ namespace MobileDashboard
 		public partial class Id
 		{
 			
+			// aapt resource value: 0x7f05000b
+			public const int AppName = 2131034123;
+			
+			// aapt resource value: 0x7f05000d
+			public const int BuName = 2131034125;
+			
+			// aapt resource value: 0x7f05000c
+			public const int Rating = 2131034124;
+			
 			// aapt resource value: 0x7f050002
 			public const int SignInBtn = 2131034114;
 			
@@ -74,6 +83,9 @@ namespace MobileDashboard
 			
 			// aapt resource value: 0x7f050003
 			public const int incorrectPwdText = 2131034115;
+			
+			// aapt resource value: 0x7f05000a
+			public const int listView = 2131034122;
 			
 			// aapt resource value: 0x7f050001
 			public const int passwordText = 2131034113;
@@ -111,6 +123,9 @@ namespace MobileDashboard
 			
 			// aapt resource value: 0x7f030002
 			public const int RAG = 2130903042;
+			
+			// aapt resource value: 0x7f030003
+			public const int RAGrow = 2130903043;
 			
 			static Layout()
 			{

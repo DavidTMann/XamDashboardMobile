@@ -1,17 +1,12 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
+using Android.Graphics;
 using Android.App;
 using Android.Content;
 using Android.OS;
-using Android.Runtime;
 using Android.Views;
 using Android.Widget;
-using System.Net;
-using System.IO;
 using Newtonsoft.Json;
+using System;
 
 namespace MobileDashboard
 {
@@ -25,31 +20,19 @@ namespace MobileDashboard
             // Create your application here
             SetContentView(Resource.Layout.RAG);
 
-            string json = GetRagJson();
+            //Grab username from MainActivity
+            string json = Intent.GetStringExtra("json") ?? null;
 
-            var rag = JsonConvert.DeserializeObject<List<RagJson>>(json);
-            
-        }
-
-        private string GetRagJson()
-        {
-            var request = WebRequest.Create(@"https://www.warren-ayling.me.uk:8443/api/dashboard/rag");
-            request.ContentType = "application/json; charset=utf-8";
-
-            string json;
-            var response = (HttpWebResponse)request.GetResponse();
-
-            using (var sr = new StreamReader(response.GetResponseStream()))
+            //Deserialize json and put it in list view
+            if (json != null)
             {
-                json = sr.ReadToEnd();
+                var rag = JsonConvert.DeserializeObject<List<RagJson>>(json);
 
-                //Remove \ and quotes wrapped round json
-                json = json.Replace(@"\", string.Empty);
-                json = json.Substring(1, json.Length - 2);
+                var listView = FindViewById<ListView>(Resource.Id.listView);
+                listView.Adapter = new RagJsonAdapter(this, rag);
 
-                return json;
-            }
-        }
+            }                        
+        }        
     }
         
     public class RagJson
@@ -60,4 +43,88 @@ namespace MobileDashboard
         public string BusinessUnit { get; set; }
         public string Business { get; set; }
     }
+
+    public class RagJsonAdapter : BaseAdapter<RagJson>
+    {
+        private readonly IList<RagJson> _items;
+        private readonly Context _context;
+
+        public RagJsonAdapter(Context context, IList<RagJson> items)
+        {
+            _items = items;
+            _context = context;
+        }
+
+        public override long GetItemId(int position)
+        {
+            return position;
+        }
+
+        public override View GetView(int position, View convertView, ViewGroup parent)
+        {
+            var item = _items[position];
+            var view = convertView;
+
+            if (view == null)
+            {
+                var inflater = LayoutInflater.FromContext(_context);
+                view = inflater.Inflate(Resource.Layout.RAGrow, parent, false);
+            }
+
+            TextView appName = view.FindViewById<TextView>(Resource.Id.AppName);
+            TextView rating = view.FindViewById<TextView>(Resource.Id.Rating);
+            TextView buName = view.FindViewById<TextView>(Resource.Id.BuName);
+
+            appName.Text = item.Name;
+            rating.Text = item.RAGStatus.ToString();
+            buName.Text = item.BusinessUnit;
+
+            //Set text color black
+            appName.SetTextColor(Color.Black);
+            rating.SetTextColor(Color.Black);
+            buName.SetTextColor(Color.Black);
+
+            if (Convert.ToInt32(rating.Text) <= 20)
+            {
+                appName.SetBackgroundColor(Color.Black);
+                rating.SetBackgroundColor(Color.Black);
+                buName.SetBackgroundColor(Color.Black);
+                //Set to white if blk background color
+                appName.SetTextColor(Color.White);
+                rating.SetTextColor(Color.White);
+                buName.SetTextColor(Color.White);
+            }
+            if (Convert.ToInt32(rating.Text) <= 40 && Convert.ToInt32(rating.Text) > 20)
+            {
+                appName.SetBackgroundColor(Color.Red);
+                rating.SetBackgroundColor(Color.Red);
+                buName.SetBackgroundColor(Color.Red);
+            }
+            if (Convert.ToInt32(rating.Text) <= 85 && Convert.ToInt32(rating.Text) > 40)
+            {
+                appName.SetBackgroundColor(Color.Yellow);
+                rating.SetBackgroundColor(Color.Yellow);
+                buName.SetBackgroundColor(Color.Yellow);
+            }
+            if (Convert.ToInt32(rating.Text) == 100)
+            {
+                appName.SetBackgroundColor(Color.Green);
+                rating.SetBackgroundColor(Color.Green);
+                buName.SetBackgroundColor(Color.Green);
+            }
+
+            return view;
+        }
+
+        public override int Count
+        {
+            get { return _items.Count; }
+        }
+
+        public override RagJson this[int position]
+        {
+            get { return _items[position]; }
+        }
+    }
 }
+
