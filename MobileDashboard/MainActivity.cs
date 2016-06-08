@@ -8,7 +8,7 @@ using Android.OS;
 
 namespace MobileDashboard
 {
-    [Activity(Label = "MobileDashboard", MainLauncher = true, Icon = "@drawable/icon")]
+    [Activity(Label = "Dashboard Mobile", MainLauncher = true, Icon = "@drawable/icon")]
     public class MainActivity : Activity
     {       
 

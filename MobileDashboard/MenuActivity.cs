@@ -14,7 +14,7 @@ using System.IO;
 
 namespace MobileDashboard
 {
-    [Activity(Label = "MenuActivity")]
+    [Activity(Label = "Menu")]
     public class MenuActivity : Activity
     {
         protected override void OnCreate(Bundle savedInstanceState)
@@ -46,7 +46,15 @@ namespace MobileDashboard
                 Intent rag = new Intent(this.ApplicationContext, typeof(RAGActivity));
                 rag.PutExtra("json", GetRagJson());
                 StartActivity(rag);
-            };          
+            };
+
+            Button mcolDashBtn = FindViewById<Button>(Resource.Id.gotoMcolDashBtn);
+            mcolDashBtn.Click += delegate
+            {
+                //Go to mcol dash page                    
+                Intent mcolDash = new Intent(this.ApplicationContext, typeof(MCOLDash));
+                StartActivity(mcolDash);
+            };
         }
 
         private string GetRagJson()

@@ -9,17 +9,17 @@
         android:layout_height="wrap_content"
         android:layout_width="0px"
         android:layout_weight="1"
-        android:textSize="8dp" />
+        android:textSize="16dp" />
     <TextView
         android:id="@+id/Rating"
         android:layout_height="wrap_content"
         android:layout_width="0px"
         android:layout_weight="1"
-        android:textSize="8dp" />
+        android:textSize="16dp" />
     <TextView
         android:id="@+id/BuName"
         android:layout_height="wrap_content"
         android:layout_width="0px"
         android:layout_weight="1"
-        android:textSize="8dp" />
+        android:textSize="16dp" />
 </LinearLayout>
