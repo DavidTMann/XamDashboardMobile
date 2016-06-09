@@ -2,12 +2,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:minWidth="25px"
-    android:minHeight="25px">
+    android:layout_height="match_parent">
     <TextView
-        android:text="Text"
+        android:text="Fragment that shows all MCOL STATS"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/item_title" />
+        android:layout_margin="30dp" />
 </LinearLayout>

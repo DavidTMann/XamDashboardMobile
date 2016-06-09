@@ -55,12 +55,21 @@ namespace MobileDashboard
                 Intent mcolDash = new Intent(this.ApplicationContext, typeof(MCOLDash));
                 StartActivity(mcolDash);
             };
+
+            Button mcolDashTabs = FindViewById<Button>(Resource.Id.mcolDashV2Btn);
+            mcolDashTabs.Click += delegate
+            {
+                //Go to mcol tabbed dash page                    
+                Intent mcolTabbedDash = new Intent(this.ApplicationContext, typeof(MCOLTabbedDash));
+                StartActivity(mcolTabbedDash);
+            };
         }
 
         private string GetRagJson()
         {
             var request = WebRequest.Create(@"https://www.warren-ayling.me.uk:8443/api/dashboard/rag");
             request.ContentType = "application/json; charset=utf-8";
+            request.Proxy = new WebProxy("proxy.logica.com", 80);
 
             string json;
             var response = (HttpWebResponse)request.GetResponse();
