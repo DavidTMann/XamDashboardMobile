@@ -89,10 +89,11 @@
   <ItemGroup>
     <Compile Include="MainActivity.cs" />
     <Compile Include="mTabs\McolAlertsFragment.cs" />
-    <Compile Include="MCOLDash.cs" />
+    <Compile Include="mTabs\McolBatchFragment.cs" />
     <Compile Include="mTabs\McolStatsFragment.cs" />
-    <Compile Include="MCOLTabbedDash.cs" />
+    <Compile Include="mTabs\MCOLTabbedDash.cs" />
     <Compile Include="MenuActivity.cs" />
+    <Compile Include="mTabs\McolSummaryFragment.cs" />
     <Compile Include="mTabs\TabsPageAdapter.cs" />
     <Compile Include="RAGActivity.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
@@ -109,9 +110,6 @@
     <AndroidResource Include="Resources\layout\RAGrow.axml">
       <SubType>AndroidResource</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\layout\MCOLDash.axml">
-      <SubType>AndroidResource</SubType>
-    </AndroidResource>
     <AndroidResource Include="Resources\layout\MCOLStatsrow.axml">
       <SubType>AndroidResource</SubType>
     </AndroidResource>
@@ -122,6 +120,12 @@
       <SubType>AndroidResource</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\layout\McolStatsFrag.axml">
+      <SubType>AndroidResource</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\McolSummFrag.axml">
+      <SubType>AndroidResource</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\McolBatchFrag.axml">
       <SubType>AndroidResource</SubType>
     </AndroidResource>
   </ItemGroup>

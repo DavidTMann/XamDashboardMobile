@@ -139,7 +139,7 @@ namespace MobileDashboard
             alert.SetPositiveButton("Yes", (sender, args) =>
              {
                  //Go to mcol dash page                    
-                 Intent mcolDash = new Intent(this.ApplicationContext, typeof(MCOLDash));
+                 Intent mcolDash = new Intent(this.ApplicationContext, typeof(MCOLTabbedDash));
                  StartActivity(mcolDash);
              });
             alert.SetNegativeButton("No", (sender, args) =>

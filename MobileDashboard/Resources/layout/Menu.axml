@@ -32,15 +32,5 @@
         android:text="MCOL Dashboard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/gotoMcolDashBtn" />
-    <Button
-        android:text="MCOL Alerts"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/gotoMcolAlertsBtn" />
-    <Button
-        android:text="MCOL DASHBOARD TABs"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:id="@+id/mcolDashV2Btn" />
 </LinearLayout>

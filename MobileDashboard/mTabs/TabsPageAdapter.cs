@@ -38,7 +38,25 @@ namespace MobileDashboard.mTabs
 
         public override Java.Lang.ICharSequence GetPageTitleFormatted(int position)
         {
-            var title = String.Format("Tab {0}", position + 1);
+            var title = "";
+
+            if (position == 0)
+            {
+                title = "MCOL Summary";
+            }
+            if (position == 1)
+            {
+                title = "MCOL Stats";
+            }
+            if (position == 2)
+            {
+                title = "MCOL Alerts";
+            }
+            if (position == 3)
+            {
+                title = "MCOL Batch";
+            }
+
             return new Java.Lang.String(title);
         }
     }

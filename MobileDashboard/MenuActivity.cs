@@ -48,14 +48,6 @@ namespace MobileDashboard
                 StartActivity(rag);
             };
 
-            Button mcolDashBtn = FindViewById<Button>(Resource.Id.gotoMcolDashBtn);
-            mcolDashBtn.Click += delegate
-            {
-                //Go to mcol dash page                    
-                Intent mcolDash = new Intent(this.ApplicationContext, typeof(MCOLDash));
-                StartActivity(mcolDash);
-            };
-
             Button mcolDashTabs = FindViewById<Button>(Resource.Id.mcolDashV2Btn);
             mcolDashTabs.Click += delegate
             {
