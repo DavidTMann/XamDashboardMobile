@@ -56,7 +56,7 @@
     </LinearLayout>
     <ListView
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_height="259.5dp"
         android:id="@+id/mcolListView"
         android:background="@android:color/darker_gray" />
 </LinearLayout>

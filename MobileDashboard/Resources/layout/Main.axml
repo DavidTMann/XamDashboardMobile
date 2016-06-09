@@ -27,4 +27,10 @@
         android:id="@+id/incorrectPwdText"
         android:visibility="invisible"
         android:textColor="@android:color/holo_red_light" />
+    <FrameLayout
+        android:minWidth="25px"
+        android:minHeight="25px"
+        android:layout_width="match_parent"
+        android:layout_height="397.5dp"
+        android:id="@+id/samplemainLayout" />
 </LinearLayout>

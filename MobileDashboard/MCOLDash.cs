@@ -17,6 +17,9 @@ namespace MobileDashboard
     [Activity(Label = "MCOL Dash")]
     public class MCOLDash : Activity
     {
+        //variable for alerting only once
+        private bool swipeRight = true;
+
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
@@ -25,7 +28,7 @@ namespace MobileDashboard
             SetContentView(Resource.Layout.MCOLDash);
             
             string json = GetMcolStatsJson();
-            
+
             //Deserialize json and put it in list view
             if (json != null)
             {
@@ -45,7 +48,13 @@ namespace MobileDashboard
             else
             {
                 ShowAlert("No JSON received cannot display data.");
-            }           
+            }
+
+            if (swipeRight)
+            {
+                ShowAlert("Swipe right to view other MCOL data.");
+                swipeRight = false;
+            }
 
         }
 

@@ -122,6 +122,35 @@ namespace MobileDashboard
             MyModel = plotModel2;
             plotViewModel.Model = MyModel;
 
+            //ListView item clicking
+            listView.ItemClick += (object sender, Android.Widget.AdapterView.ItemClickEventArgs e) =>
+            {
+
+                string selectedFromList = listView.GetItemAtPosition(e.Position).ToString();
+
+                ShowAlert("Would you like to go to MCOL Dashboard?");
+            };
+        }
+        
+        private void ShowAlert(string str)
+        {
+            AlertDialog.Builder alert = new AlertDialog.Builder(this);
+            alert.SetTitle(str);
+            alert.SetPositiveButton("Yes", (sender, args) =>
+             {
+                 //Go to mcol dash page                    
+                 Intent mcolDash = new Intent(this.ApplicationContext, typeof(MCOLDash));
+                 StartActivity(mcolDash);
+             });
+            alert.SetNegativeButton("No", (sender, args) =>
+            {
+                // User pressed no do nothing
+            });
+
+            //run the alert in UI thread to display in the screen
+            RunOnUiThread(() => {
+                alert.Show();
+            });
         }        
     }
         

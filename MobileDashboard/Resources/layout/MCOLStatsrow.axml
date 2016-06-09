@@ -8,41 +8,41 @@
         android:layout_height="wrap_content"
         android:layout_width="0px"
         android:layout_weight="1"
-        android:textSize="14dp"
+        android:textSize="12dp"
         android:textColor="@android:color/black" />
     <TextView
         android:id="@+id/Server"
         android:layout_height="wrap_content"
         android:layout_width="0px"
         android:layout_weight="1"
-        android:textSize="14dp"
+        android:textSize="12dp"
         android:textColor="@android:color/black" />
     <TextView
         android:id="@+id/Memory"
         android:layout_height="wrap_content"
         android:layout_width="0px"
         android:layout_weight="1"
-        android:textSize="14dp"
+        android:textSize="12dp"
         android:textColor="@android:color/black" />
     <TextView
         android:id="@+id/Uptime"
         android:layout_height="wrap_content"
         android:layout_width="0px"
         android:layout_weight="1"
-        android:textSize="14dp"
+        android:textSize="12dp"
         android:textColor="@android:color/black" />
     <TextView
         android:id="@+id/AvgReqTime"
         android:layout_height="wrap_content"
         android:layout_width="0px"
         android:layout_weight="1"
-        android:textSize="14dp"
+        android:textSize="12dp"
         android:textColor="@android:color/black" />
     <TextView
         android:id="@+id/ActiSessions"
         android:layout_height="wrap_content"
         android:layout_width="0px"
         android:layout_weight="1"
-        android:textSize="14dp"
+        android:textSize="12dp"
         android:textColor="@android:color/black" />
 </LinearLayout>

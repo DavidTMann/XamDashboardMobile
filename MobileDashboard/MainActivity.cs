@@ -19,24 +19,29 @@ namespace MobileDashboard
             // Set our view from the "main" layout resource
             SetContentView(Resource.Layout.Main);
 
-            // Get our button from the layout resource,
-            // and attach an event to it
-            Button signInBtn = FindViewById<Button>(Resource.Id.SignInBtn);
+            FragmentTransaction transaction = FragmentManager.BeginTransaction();
+            SlidingTabsFragment fragment = new SlidingTabsFragment();
+            transaction.Replace(Resource.Id.samplemainLayout, fragment);
+            transaction.Commit();
 
-            //username field
-            TextView user = FindViewById<TextView>(Resource.Id.userNameTxt);
-            user.SetSingleLine();
-            //pwd field
-            TextView pwd = FindViewById<TextView>(Resource.Id.passwordText);
-            user.SetSingleLine();
+            //// Get our button from the layout resource,
+            //// and attach an event to it
+            //Button signInBtn = FindViewById<Button>(Resource.Id.SignInBtn);
 
-            //incorrect credentials txt box
-            var incorrectCredTxt = FindViewById<TextView>(Resource.Id.incorrectPwdText);
-            
-            signInBtn.Click += delegate
-            {
-                ValidateUser(user, pwd, incorrectCredTxt);
-            };
+            ////username field
+            //TextView user = FindViewById<TextView>(Resource.Id.userNameTxt);
+            //user.SetSingleLine();
+            ////pwd field
+            //TextView pwd = FindViewById<TextView>(Resource.Id.passwordText);
+            //user.SetSingleLine();
+
+            ////incorrect credentials txt box
+            //var incorrectCredTxt = FindViewById<TextView>(Resource.Id.incorrectPwdText);
+
+            //signInBtn.Click += delegate
+            //{
+            //    ValidateUser(user, pwd, incorrectCredTxt);
+            //};
         }
 
         private void ValidateUser(TextView user, TextView pwd, TextView incorrectCredTxt)
