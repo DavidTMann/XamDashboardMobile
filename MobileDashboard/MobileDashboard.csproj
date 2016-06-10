@@ -87,6 +87,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="JsonAdapters\McolStatsAdapter.cs" />
+    <Compile Include="JsonAdapters\RagJsonAdapter.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="mTabs\McolAlertsFragment.cs" />
     <Compile Include="mTabs\McolBatchFragment.cs" />
@@ -98,6 +100,7 @@
     <Compile Include="RAGActivity.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SharedClass\DataExpiry.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

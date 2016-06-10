@@ -49,4 +49,25 @@
         android:layout_height="259.5dp"
         android:id="@+id/mcolListView"
         android:background="@android:color/darker_gray" />
+    <TextView
+        android:text="The data has expired."
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/statsExpiredTxt"
+        android:visibility="invisible" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dip"
+        android:layout_weight="1"
+        android:gravity="center|bottom"
+        android:orientation="vertical">
+        <Button
+            android:id="@+id/statsBackToMenuBtn"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="145dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|center"
+            android:text="Back to menu" />
+    </LinearLayout>
 </LinearLayout>

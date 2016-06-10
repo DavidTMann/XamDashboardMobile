@@ -9,11 +9,16 @@ using Android.App;
 using System.IO;
 using System.Net;
 using Newtonsoft.Json;
+using MobileDashboard.JsonAdapters;
+using MobileDashboard.SharedClass;
+using System.Timers;
 
 namespace MobileDashboard
 {
     class McolStatsFragment : Android.Support.V4.App.Fragment
     {
+        DataExpiry da = new DataExpiry();
+        public static bool expired = false;
 
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
@@ -21,13 +26,43 @@ namespace MobileDashboard
 
             string json = GetMcolStatsJson();
 
+            Button menuBtn = rootView.FindViewById<Button>(Resource.Id.statsBackToMenuBtn);
+            menuBtn.Click += delegate
+            {
+                //Go to mcol tabbed dash page                    
+                Intent menu = new Intent(this.Activity, typeof(MenuActivity));
+                StartActivity(menu);
+            };
+
             //Deserialize json and put it in list view
-            var mcol = JsonConvert.DeserializeObject<List<McolStats>>(json);
+            var mcolStats = JsonConvert.DeserializeObject<List<McolStats>>(json);
+
+            //Add expiry date to mcolStats
+            //Currently adds 10 minutes, change to 1 hour after testing UTC are an hour behind
+            mcolStats[0].ExpiryDate = DataExpiry.currentTime.AddMinutes(62);
 
             ListView mcolListView = rootView.FindViewById<ListView>(Resource.Id.mcolListView);
-            mcolListView.Adapter = new McolStatsAdapter(this.Activity, mcol);
-            
+
+            //Checks expiry date
+            CheckExpiryStatsData( mcolStats, mcolListView, rootView);
+
+            mcolListView.Adapter = new McolStatsAdapter(this.Activity, mcolStats);
+
             return rootView;
+        }
+
+        //Run this method, if expired makes data null
+        private void CheckExpiryStatsData(List<McolStats> mcolStats, ListView mcolListView, View rootView)
+        {
+            if (da.IsExpired(mcolStats[0].ExpiryDate))
+            {
+                expired = true;
+                mcolStats = null;
+                mcolListView.Visibility = ViewStates.Gone;
+
+                TextView statsExpiredTxt = rootView.FindViewById<TextView>(Resource.Id.statsExpiredTxt);
+                statsExpiredTxt.Visibility = ViewStates.Visible;
+            }
         }
 
         private string GetMcolStatsJson()
@@ -49,6 +84,6 @@ namespace MobileDashboard
 
                 return json;
             }
-        }
+        }        
     }
 }

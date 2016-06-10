@@ -18,6 +18,14 @@ namespace MobileDashboard.mTabs
         {
             View rootView = inflater.Inflate(Resource.Layout.McolSummFrag, container, false);
 
+            Button menuBtn = rootView.FindViewById<Button>(Resource.Id.summBackToMenuBtn);
+            menuBtn.Click += delegate
+            {
+                //Go to mcol tabbed dash page                    
+                Intent menu = new Intent(this.Activity, typeof(MenuActivity));
+                StartActivity(menu);
+            };
+
             return rootView;
         }
     }

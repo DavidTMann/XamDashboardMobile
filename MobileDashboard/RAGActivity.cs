@@ -10,6 +10,8 @@ using System;
 using OxyPlot;
 using OxyPlot.Series;
 using OxyPlot.Xamarin.Android;
+using MobileDashboard.JsonAdapters;
+using MobileDashboard.SharedClass;
 
 namespace MobileDashboard
 {   
@@ -17,10 +19,11 @@ namespace MobileDashboard
     [Activity(Label = "RAG Stats")]
     public class RAGActivity : Activity
     {
-
+        DataExpiry da = new DataExpiry();
         private PlotView plotViewModel;
         private LinearLayout mLLayoutModel;
         public PlotModel MyModel { get; set; }
+        private bool expired = false;
 
         protected override void OnCreate(Bundle savedInstanceState)
         {
@@ -34,10 +37,10 @@ namespace MobileDashboard
 
             //Deserialize json and put it in list view
             
-            var rag = JsonConvert.DeserializeObject<List<RagJson>>(json);
+            var ragObj = JsonConvert.DeserializeObject<List<RagJson>>(json);
 
             //remove all apps apart from mcol and darts
-            foreach (var r in rag.ToArray())
+            foreach (var r in ragObj.ToArray())
             {
                 if (r.Name == "MCOL" || r.Name == "DARTS")
                 {
@@ -46,205 +49,150 @@ namespace MobileDashboard
 
                 if (!r.Name.Contains("MCOL") || (!r.Name.Contains("DARTS")))
                 {
-                    rag.Remove(r);
+                    ragObj.Remove(r);
                 }
-            }
+            }           
 
-            var listView = FindViewById<ListView>(Resource.Id.listView);
-            listView.Adapter = new RagJsonAdapter(this, rag);
-            
-            //Come back to this when Im not stressed
-            List<int> appRagScores = new List<int>();
-            List<string> appNames = new List<string>();
-            
-            //Add to array of app name 
-            foreach (RagJson r in rag.ToArray())
+            //Add expiry date to 1st item in RagJson list 
+            //Currently adds 2 mins to expiry date UTC is 1 hr behind
+            ragObj[0].ExpiryDate = DataExpiry.currentTime.AddMinutes(62);
+
+            var ragListView = FindViewById<ListView>(Resource.Id.listView);
+
+            CheckExpiryRagData(ragObj, ragListView);
+
+            ragListView.Adapter = new RagJsonAdapter(this, ragObj);
+
+            if (!expired)
             {
-                appRagScores.Add(r.RAGStatus);
-                appNames.Add(r.Name);
-            }
+                //Pie chart stuff; come back to this when Im not stressed
+                List<int> appRagScores = new List<int>();
+                List<string> appNames = new List<string>();
 
-            int[] modelAllocValues = appRagScores.ToArray();
-            string[] modelAllocations = appNames.ToArray();
+                //Add to array of app name 
+                foreach (RagJson r in ragObj.ToArray())
+                {
+                    appRagScores.Add(r.RAGStatus);
+                    appNames.Add(r.Name);
+                }
 
-            string[] colors = new string[] { "#7DA137", "#6EA6F3"};
-            int total = 0;
+                int[] modelAllocValues = appRagScores.ToArray();
+                string[] modelAllocations = appNames.ToArray();
 
-            //Pie chart oxyPlot
-            plotViewModel = FindViewById<PlotView>(Resource.Id.plotViewModel);
-            mLLayoutModel = FindViewById<LinearLayout>(Resource.Id.linearLayoutModel);
+                string[] colors = new string[] { "#7DA137", "#6EA6F3" };
+                int total = 0;
 
-            //Model Allocation Pie char
-            var plotModel2 = new PlotModel();
-            var pieSeries2 = new PieSeries();
-            pieSeries2.InsideLabelPosition = 0.0;
-            pieSeries2.InsideLabelFormat = null;
+                //Pie chart oxyPlot
+                plotViewModel = FindViewById<PlotView>(Resource.Id.plotViewModel);
+                mLLayoutModel = FindViewById<LinearLayout>(Resource.Id.linearLayoutModel);
 
-            for (int i = 0; i < modelAllocations.Length && i < modelAllocValues.Length && i < colors.Length; i++)
-            { 
+                //Model Allocation Pie char
+                var plotModel2 = new PlotModel();
+                var pieSeries2 = new PieSeries();
+                pieSeries2.InsideLabelPosition = 0.0;
+                pieSeries2.InsideLabelFormat = null;
 
-                pieSeries2.Slices.Add(new PieSlice(modelAllocations[i], modelAllocValues[i]) { Fill = OxyColor.Parse(colors[i]) });
-                pieSeries2.OutsideLabelFormat = null;
+                for (int i = 0; i < modelAllocations.Length && i < modelAllocValues.Length && i < colors.Length; i++)
+                {
+                    pieSeries2.Slices.Add(new PieSlice(modelAllocations[i], modelAllocValues[i]) { Fill = OxyColor.Parse(colors[i]) });
+                    pieSeries2.OutsideLabelFormat = null;
 
-                double mValue = modelAllocValues[i];
-                double percentValue = (mValue / total) * 100;
-                string percent = percentValue.ToString("#.##");
+                    double mValue = modelAllocValues[i];
+                    double percentValue = (mValue / total) * 100;
+                    string percent = percentValue.ToString("#.##");
 
-                //Add horizontal layout for titles and colors of slices
-                LinearLayout hLayot = new LinearLayout(this);
-                hLayot.Orientation = Android.Widget.Orientation.Horizontal;
-                LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WrapContent, LinearLayout.LayoutParams.WrapContent);
-                hLayot.LayoutParameters = param;
+                    //Add horizontal layout for titles and colors of slices
+                    LinearLayout hLayot = new LinearLayout(this);
+                    hLayot.Orientation = Android.Widget.Orientation.Horizontal;
+                    LinearLayout.LayoutParams param = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WrapContent, LinearLayout.LayoutParams.WrapContent);
+                    hLayot.LayoutParameters = param;
 
-                //Add views with colors
-                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(15, 15);
+                    //Add views with colors
+                    LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(15, 15);
 
-                View mView = new View(this);
-                lp.TopMargin = 5;
-                mView.LayoutParameters = lp;
-                mView.SetBackgroundColor(Android.Graphics.Color.ParseColor(colors[i]));
+                    View mView = new View(this);
+                    lp.TopMargin = 5;
+                    mView.LayoutParameters = lp;
+                    mView.SetBackgroundColor(Android.Graphics.Color.ParseColor(colors[i]));
 
-                //Add titles
-                TextView label = new TextView(this);
-                label.TextSize = 15;
-                label.SetTextColor(Android.Graphics.Color.White);
-                label.Text = string.Join(" ", modelAllocations[i]);
-                param.LeftMargin = 8;
-                label.LayoutParameters = param;
+                    //Add titles
+                    TextView label = new TextView(this);
+                    label.TextSize = 15;
+                    label.SetTextColor(Android.Graphics.Color.White);
+                    label.Text = string.Join(" ", modelAllocations[i]);
+                    param.LeftMargin = 8;
+                    label.LayoutParameters = param;
 
-                hLayot.AddView(mView);
-                hLayot.AddView(label);
-                mLLayoutModel.AddView(hLayot);
+                    hLayot.AddView(mView);
+                    hLayot.AddView(label);
+                    mLLayoutModel.AddView(hLayot);
 
-            }
+                }
 
-            plotModel2.Series.Add(pieSeries2);
-            MyModel = plotModel2;
-            plotViewModel.Model = MyModel;
+                plotModel2.Series.Add(pieSeries2);
+                MyModel = plotModel2;
+                plotViewModel.Model = MyModel;
 
-            //ListView item clicking
-            listView.ItemClick += (object sender, Android.Widget.AdapterView.ItemClickEventArgs e) =>
-            {
+                //ListView item clicking
+                ragListView.ItemClick += (object sender, Android.Widget.AdapterView.ItemClickEventArgs e) =>
+                {
 
-                string selectedFromList = listView.GetItemAtPosition(e.Position).ToString();
+                    string selectedFromList = ragListView.GetItemAtPosition(e.Position).ToString();
 
-                ShowAlert("Would you like to go to MCOL Dashboard?");
-            };
+                    ShowAlert("Would you like to go to MCOL Dashboard?", true);
+                };
+            }            
         }
-        
-        private void ShowAlert(string str)
-        {
-            AlertDialog.Builder alert = new AlertDialog.Builder(this);
-            alert.SetTitle(str);
-            alert.SetPositiveButton("Yes", (sender, args) =>
-             {
-                 //Go to mcol dash page                    
-                 Intent mcolDash = new Intent(this.ApplicationContext, typeof(MCOLTabbedDash));
-                 StartActivity(mcolDash);
-             });
-            alert.SetNegativeButton("No", (sender, args) =>
-            {
-                // User pressed no do nothing
-            });
 
-            //run the alert in UI thread to display in the screen
-            RunOnUiThread(() => {
-                alert.Show();
-            });
+        //Run this method, if expired makes data null
+        private void CheckExpiryRagData(List<RagJson> ragObj, ListView ragListView)
+        {
+            if (da.IsExpired(ragObj[0].ExpiryDate))
+            {
+                ragObj = null;
+                expired = true;
+                ragListView.Visibility = ViewStates.Gone;
+
+                ShowAlert("Sorry, the data has expired.", false);
+            }
+        }
+
+        private void ShowAlert(string str, bool yesAndNo)
+        {
+            if (yesAndNo)
+            {
+                AlertDialog.Builder alert = new AlertDialog.Builder(this);
+                alert.SetTitle(str);
+                alert.SetPositiveButton("Yes", (sender, args) =>
+                {
+                    //Go to mcol dash page                    
+                    Intent mcolDash = new Intent(this.ApplicationContext, typeof(MCOLTabbedDash));
+                    StartActivity(mcolDash);
+                });
+                alert.SetNegativeButton("No", (sender, args) =>
+                {
+                    // User pressed no do nothing
+                });
+
+                //run the alert in UI thread to display in the screen
+                RunOnUiThread(() => {
+                    alert.Show();
+                });
+            }
+            else if (!yesAndNo)
+            {
+                AlertDialog.Builder alert = new AlertDialog.Builder(this);
+                alert.SetTitle(str);
+                alert.SetPositiveButton("OK", (senderAlert, args) => {
+                    // write your own set of instructions
+                });
+                //run the alert in UI thread to display in the screen
+                RunOnUiThread(() => {
+                    alert.Show();
+                });
+            }
+            
         }        
-    }
-        
-    public class RagJson
-    {
-        public string Name { get; set; }
-        public int RAGStatus { get; set; }
-        public string RAGColour { get; set; }
-        public string BusinessUnit { get; set; }
-        public string Business { get; set; }
-    }
-
-    public class RagJsonAdapter : BaseAdapter<RagJson>
-    {
-        private readonly IList<RagJson> _items;
-        private readonly Context _context;
-
-        public RagJsonAdapter(Context context, IList<RagJson> items)
-        {
-            _items = items;
-            _context = context;
-        }
-
-        public override long GetItemId(int position)
-        {
-            return position;
-        }
-
-        public override View GetView(int position, View convertView, ViewGroup parent)
-        {
-            var item = _items[position];
-            var view = convertView;
-
-            if (view == null)
-            {
-                var inflater = LayoutInflater.FromContext(_context);
-                view = inflater.Inflate(Resource.Layout.RAGrow, parent, false);
-            }
-
-            TextView appName = view.FindViewById<TextView>(Resource.Id.AppName);
-            TextView rating = view.FindViewById<TextView>(Resource.Id.Rating);
-            TextView buName = view.FindViewById<TextView>(Resource.Id.BuName);
-
-            appName.Text = item.Name;
-            rating.Text = item.RAGStatus.ToString();
-            buName.Text = item.BusinessUnit;
-
-            //Set text color black
-            appName.SetTextColor(Color.Black);
-            rating.SetTextColor(Color.Black);
-            buName.SetTextColor(Color.Black);
-
-            if (Convert.ToInt32(rating.Text) <= 20)
-            {
-                appName.SetBackgroundColor(Color.Black);
-                rating.SetBackgroundColor(Color.Black);
-                buName.SetBackgroundColor(Color.Black);
-                //Set to white if blk background color
-                appName.SetTextColor(Color.White);
-                rating.SetTextColor(Color.White);
-                buName.SetTextColor(Color.White);
-            }
-            if (Convert.ToInt32(rating.Text) <= 40 && Convert.ToInt32(rating.Text) > 20)
-            {
-                appName.SetBackgroundColor(Color.Red);
-                rating.SetBackgroundColor(Color.Red);
-                buName.SetBackgroundColor(Color.Red);
-            }
-            if (Convert.ToInt32(rating.Text) <= 85 && Convert.ToInt32(rating.Text) > 40)
-            {
-                appName.SetBackgroundColor(Color.Yellow);
-                rating.SetBackgroundColor(Color.Yellow);
-                buName.SetBackgroundColor(Color.Yellow);
-            }
-            if (Convert.ToInt32(rating.Text) == 100)
-            {
-                appName.SetBackgroundColor(Color.Green);
-                rating.SetBackgroundColor(Color.Green);
-                buName.SetBackgroundColor(Color.Green);
-            }
-
-
-            return view;
-        }
-
-        public override int Count
-        {
-            get { return _items.Count; }
-        }
-
-        public override RagJson this[int position]
-        {
-            get { return _items[position]; }
-        }
     }
 }
 
