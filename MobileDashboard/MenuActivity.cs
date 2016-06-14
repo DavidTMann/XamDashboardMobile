@@ -11,6 +11,8 @@ using Android.Views;
 using Android.Widget;
 using System.Net;
 using System.IO;
+using MobileDashboard.PushNotifications;
+using ClientApp;
 
 namespace MobileDashboard
 {
@@ -55,6 +57,11 @@ namespace MobileDashboard
                 Intent mcolTabbedDash = new Intent(this.ApplicationContext, typeof(MCOLTabbedDash));
                 StartActivity(mcolTabbedDash);
             };
+
+            
+
+            
+
         }
 
         private string GetRagJson()

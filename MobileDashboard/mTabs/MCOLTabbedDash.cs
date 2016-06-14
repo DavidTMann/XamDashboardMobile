@@ -50,6 +50,22 @@ namespace MobileDashboard
 
             var viewPager = FindViewById<Android.Support.V4.View.ViewPager>(Resource.Id.mcolViewPager);
             viewPager.Adapter = adapter;
+
+
+            // Construct a back stack for cross-task navigation:
+            Android.Support.V4.App.TaskStackBuilder stackBuilder = Android.Support.V4.App.TaskStackBuilder.Create(this);
+                        
+            // Build the notification:
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
+                .SetAutoCancel(true)                    // Dismiss from the notif. area when clicked
+                .SetContentTitle("Button Clicked")      // Set its title
+                .SetSmallIcon(Resource.Drawable.Icon)  // Display this icon
+                .SetContentText("Test notification man"); // The message to display.
+
+            // Finally, publish the notification:
+            NotificationManager notificationManager =
+                (NotificationManager)GetSystemService(Context.NotificationService);
+            notificationManager.Notify(1 ,builder.Build());
         }       
 
         public void ShowAlert(string str)

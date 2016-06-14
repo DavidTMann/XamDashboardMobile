@@ -8,6 +8,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="30dp" />
+    <ListView
+        android:layout_width="fill_parent"
+        android:layout_height="259.5dp"
+        android:id="@+id/mcolAlertsListView"
+        android:background="@android:color/darker_gray" />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dip"
