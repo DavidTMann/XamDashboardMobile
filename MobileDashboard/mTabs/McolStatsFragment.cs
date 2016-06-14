@@ -69,7 +69,9 @@ namespace MobileDashboard
         {
             var request = WebRequest.Create(@"https://www.warren-ayling.me.uk:8443/api/dashboard/mcol/stats");
             request.ContentType = "application/json; charset=utf-8";
-            request.Proxy = new WebProxy("proxy.logica.com", 80);
+
+            //Comment out if debugging on android device
+            //request.Proxy = new WebProxy("proxy.logica.com", 80);
 
             string json;
             var response = (HttpWebResponse)request.GetResponse();

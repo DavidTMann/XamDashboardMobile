@@ -97,6 +97,7 @@
     <Compile Include="MenuActivity.cs" />
     <Compile Include="mTabs\McolSummaryFragment.cs" />
     <Compile Include="mTabs\TabsPageAdapter.cs" />
+    <Compile Include="PushNotifications\AndroidGCMPushNotification.cs" />
     <Compile Include="RAGActivity.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -142,7 +143,9 @@
     <AndroidResource Include="Resources\drawable\Icon.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Properties\AndroidManifest.xml" />
+    <None Include="Properties\AndroidManifest.xml">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <XamarinComponentReference Include="xamandroidsupportv4-18">
