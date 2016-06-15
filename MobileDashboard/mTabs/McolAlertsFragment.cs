@@ -15,6 +15,8 @@ namespace MobileDashboard
 {
     class McolAlertsFragment : Fragment
     {
+        public static bool Level5Notify = false;
+
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
             View rootView = inflater.Inflate(Resource.Layout.McolAlertsFrag, container, false);
@@ -31,6 +33,15 @@ namespace MobileDashboard
 
             //Deserialize json and put it in list view
             var mcolAlerts = JsonConvert.DeserializeObject<List<McolAlerts>>(json);
+
+            //Check to see if level 5 alerts in there
+            foreach (var al in mcolAlerts)
+            {
+                if (al.serverAlerts.priority == "Level 5")
+                {
+                    Level5Notify = true;
+                }
+            }
 
             ListView mcolAlertsListView = rootView.FindViewById<ListView>(Resource.Id.mcolAlertsListView);
 

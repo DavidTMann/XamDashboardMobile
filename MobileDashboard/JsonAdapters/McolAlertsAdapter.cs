@@ -38,14 +38,25 @@ namespace MobileDashboard.JsonAdapters
                 var inflater = LayoutInflater.FromContext(_context);
                 view = inflater.Inflate(Resource.Layout.MCOLAlertsRow, parent, false);
             }
-            
-            view.FindViewById<TextView>(Resource.Id.WhenAlerts).Text = Convert.ToDateTime(item.serverAlerts.when.Substring(item.serverAlerts.when.Length - 3)).ToString();                        
 
-            view.FindViewById<TextView>(Resource.Id.ServAlerts).Text = item.serverAlerts.server;
-            view.FindViewById<TextView>(Resource.Id.PriorityAlerts).Text = item.serverAlerts.priority;
-            view.FindViewById<TextView>(Resource.Id.FileAlerts).Text = item.serverAlerts.file;
-            view.FindViewById<TextView>(Resource.Id.TitleAlerts).Text = item.serverAlerts.title;
-
+            if (item.serverAlerts.when.Contains(","))
+            {
+                view.FindViewById<TextView>(Resource.Id.WhenAlerts).Text = item.serverAlerts.when.Remove(item.serverAlerts.when.IndexOf(','));
+                
+                view.FindViewById<TextView>(Resource.Id.ServAlerts).Text = item.serverAlerts.server;
+                view.FindViewById<TextView>(Resource.Id.PriorityAlerts).Text = item.serverAlerts.priority;
+                view.FindViewById<TextView>(Resource.Id.FileAlerts).Text = item.serverAlerts.file;
+                view.FindViewById<TextView>(Resource.Id.TitleAlerts).Text = item.serverAlerts.title;
+            }
+            else
+            {
+                view.FindViewById<TextView>(Resource.Id.WhenAlerts).Text = item.serverAlerts.when;
+                view.FindViewById<TextView>(Resource.Id.ServAlerts).Text = item.serverAlerts.server;
+                view.FindViewById<TextView>(Resource.Id.PriorityAlerts).Text = item.serverAlerts.priority;
+                view.FindViewById<TextView>(Resource.Id.FileAlerts).Text = item.serverAlerts.file;
+                view.FindViewById<TextView>(Resource.Id.TitleAlerts).Text = item.serverAlerts.title;
+            }
+                      
             return view;
         }
 

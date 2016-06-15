@@ -133,10 +133,6 @@
     <Compile Include="MenuActivity.cs" />
     <Compile Include="mTabs\McolSummaryFragment.cs" />
     <Compile Include="mTabs\TabsPageAdapter.cs" />
-    <Compile Include="PushNotifications\AndroidGCMPushNotification.cs" />
-    <Compile Include="PushNotifications\GcmListenerService.cs" />
-    <Compile Include="PushNotifications\InstanceIdListenerService.cs" />
-    <Compile Include="PushNotifications\RegistrationIntentService.cs" />
     <Compile Include="RAGActivity.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
