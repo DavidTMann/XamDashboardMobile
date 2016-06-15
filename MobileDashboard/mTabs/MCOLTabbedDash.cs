@@ -38,7 +38,10 @@ namespace MobileDashboard
                 isFirstRun = false;
             }
 
+            //Checks if data is expired
             CheckIfDataIsExpired();
+
+            //Checks if level 5 alert 
             CheckIfLevel5Alert();
 
             var adapter =

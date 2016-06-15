@@ -11,8 +11,6 @@ using Android.Views;
 using Android.Widget;
 using System.Net;
 using System.IO;
-using MobileDashboard.PushNotifications;
-using ClientApp;
 
 namespace MobileDashboard
 {
