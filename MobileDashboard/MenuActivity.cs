@@ -11,6 +11,8 @@ using Android.Views;
 using Android.Widget;
 using System.Net;
 using System.IO;
+using Newtonsoft.Json;
+using MobileDashboard.JsonAdapters;
 
 namespace MobileDashboard
 {
@@ -22,7 +24,7 @@ namespace MobileDashboard
             base.OnCreate(savedInstanceState);
 
             // Create your application here
-            SetContentView(Resource.Layout.Menu);
+            SetContentView(Resource.Layout.Menu);            
 
             //Grab username from MainActivity
             string userTxt = Intent.GetStringExtra("user") ?? "unknown";
@@ -56,13 +58,77 @@ namespace MobileDashboard
                 StartActivity(mcolTabbedDash);
             };
 
-            
-
-            
+            if (!McolAlertsFragment.AlreadyNotified)
+            {
+                //Where MCOL ALERTS Notifications are handled
+                GetMcolAlerts();
+                //Sends if alert lvl5
+                SendLevel5Alert(userTxt);
+            }           
 
         }
 
-        private string GetRagJson()
+        private void GetMcolAlerts()
+        {
+            McolAlertsFragment alerts = new McolAlertsFragment();
+
+            string json = alerts.GetMcolServAlertsJson();
+
+            //Deserialize json and put it in list view
+            var mcolAlerts = JsonConvert.DeserializeObject<List<McolAlerts>>(json);
+
+            //Check to see if level 5 alerts in there
+            foreach (var al in mcolAlerts)
+            {
+                if (al.serverAlerts.priority == "Level 5")
+                {
+                    McolAlertsFragment.Level5Notify = true;
+                }
+            }
+        }
+
+        private void SendLevel5Alert(string userTxt)
+        {
+            if (McolAlertsFragment.Level5Notify)
+            {
+                const int Level5NotificationId = 1000;
+
+                //Create SMS intent and pass in username
+                Intent smsIntent = new Intent(this, typeof(SMSActivity));
+                smsIntent.PutExtra("user", userTxt);
+
+                /// Construct a back stack for cross-task navigation:
+                TaskStackBuilder stackBuilder = TaskStackBuilder.Create(this);
+                stackBuilder.AddParentStack(Java.Lang.Class.FromType(typeof(SMSActivity)));
+                stackBuilder.AddNextIntent(smsIntent);
+
+                // Create the PendingIntent with the back stack:            
+                PendingIntent resultPendingIntent =
+                    stackBuilder.GetPendingIntent(0, PendingIntentFlags.UpdateCurrent);
+
+                //Big text style notification 
+                string longMessage = "MCOL level 5 alerts are present. Click this notification to notify other team members.";
+
+                Notification notif = new Notification.Builder(this)
+                .SetContentTitle("Warning: Level 5 Alerts")
+                .SetVibrate(new long[] { 1000, 1000, 1000, 1000, 1000 })
+                .SetContentIntent(resultPendingIntent)
+                .SetSmallIcon(Resource.Drawable.Icon)
+                .SetStyle(new Notification.BigTextStyle()
+                    .BigText(longMessage))
+                .Build();
+
+                // Finally, publish the notification:
+                NotificationManager notificationManager =
+                    (NotificationManager)GetSystemService(Context.NotificationService);
+                notificationManager.Notify(Level5NotificationId, notif);
+
+                //Once notified we can stop sending alert for this session
+                McolAlertsFragment.AlreadyNotified = true;
+            }
+        }
+
+        public string GetRagJson()
         {
             var request = WebRequest.Create(@"https://www.warren-ayling.me.uk:8443/api/dashboard/rag");
             request.ContentType = "application/json; charset=utf-8";

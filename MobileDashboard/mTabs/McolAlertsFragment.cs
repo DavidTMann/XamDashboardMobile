@@ -16,13 +16,12 @@ namespace MobileDashboard
     class McolAlertsFragment : Fragment
     {
         public static bool Level5Notify = false;
+        public static bool AlreadyNotified = false;
 
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
             View rootView = inflater.Inflate(Resource.Layout.McolAlertsFrag, container, false);
-
-            string json = GetMcolServAlertsJson();
-
+            
             Button menuBtn = rootView.FindViewById<Button>(Resource.Id.alertsBackToMenuBtn);
             menuBtn.Click += delegate
             {
@@ -31,17 +30,9 @@ namespace MobileDashboard
                 StartActivity(menu);
             };
 
-            //Deserialize json and put it in list view
-            var mcolAlerts = JsonConvert.DeserializeObject<List<McolAlerts>>(json);
+            string json = GetMcolServAlertsJson();
 
-            //Check to see if level 5 alerts in there
-            foreach (var al in mcolAlerts)
-            {
-                if (al.serverAlerts.priority == "Level 5")
-                {
-                    Level5Notify = true;
-                }
-            }
+            var mcolAlerts = JsonConvert.DeserializeObject<List<McolAlerts>>(json);
 
             ListView mcolAlertsListView = rootView.FindViewById<ListView>(Resource.Id.mcolAlertsListView);
 
@@ -50,7 +41,7 @@ namespace MobileDashboard
             return rootView;
         }
 
-        private string GetMcolServAlertsJson()
+        public string GetMcolServAlertsJson()
         {
             var request = WebRequest.Create(@"https://www.warren-ayling.me.uk:8443/api/dashboard/mcol/serveralerts");
             request.ContentType = "application/json; charset=utf-8";
@@ -77,6 +68,6 @@ namespace MobileDashboard
 
                 return json;
             }
-        }
+        }        
     }
 }

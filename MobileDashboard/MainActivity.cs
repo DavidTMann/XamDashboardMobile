@@ -16,10 +16,7 @@ namespace MobileDashboard
         {
             base.OnCreate(bundle);
 
-            // Set our view from the "main" layout resource
             SetContentView(Resource.Layout.Main);
-
-
 
             // Get our button from the layout resource,
             // and attach an event to it
@@ -43,7 +40,7 @@ namespace MobileDashboard
 
         private void ValidateUser(TextView user, TextView pwd, TextView incorrectCredTxt)
         {
-            if (!(user.Text == "aylingw" && pwd.Text == "password") || user.Text == string.Empty && pwd.Text == string.Empty)
+            if (!(user.Text.Trim() == "aylingw" && pwd.Text.Trim() == "password") || user.Text == string.Empty && pwd.Text == string.Empty)
             {
                 //Show error message
                 incorrectCredTxt.Visibility = ViewStates.Visible;

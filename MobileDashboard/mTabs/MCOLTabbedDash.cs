@@ -6,6 +6,7 @@ using Android.Support.V4.View;
 using Java.Lang;
 using Fragment = Android.Support.V4.App.Fragment;
 using FragmentManager = Android.Support.V4.App.FragmentManager;
+using TaskStackBuilder = Android.Support.V4.App.TaskStackBuilder;
 using MobileDashboard.mTabs;
 using System;
 using Android.Widget;
@@ -16,6 +17,7 @@ using System.Net;
 using System.IO;
 using Newtonsoft.Json;
 using Android.Preferences;
+using Android.Graphics;
 
 namespace MobileDashboard
 {
@@ -37,46 +39,68 @@ namespace MobileDashboard
                 ShowAlert("Swipe right to view other MCOL data.");
                 isFirstRun = false;
             }
-
-            //Checks if data is expired
-            CheckIfDataIsExpired();
-
-            //Checks if level 5 alert 
-            CheckIfLevel5Alert();
-
+            
             var adapter =
             new TabsPageAdapter(SupportFragmentManager, new McolSummaryFragment(), new McolStatsFragment(), new McolAlertsFragment(), new McolBatchFragment());
 
             var viewPager = FindViewById<Android.Support.V4.View.ViewPager>(Resource.Id.mcolViewPager);
             viewPager.Adapter = adapter;
 
+
+            //Checks if data is expired
+            CheckIfDataIsExpired();
+            
         }
 
-        private void CheckIfLevel5Alert()
-        {
+        public void SendLevel5Alert()
+        {  
             if (McolAlertsFragment.Level5Notify)
             {
-                //Notification to say data has expired
-                // Construct a back stack for cross-task navigation:
-                Android.Support.V4.App.TaskStackBuilder stackBuilder = Android.Support.V4.App.TaskStackBuilder.Create(this);
+                // Setup an intent for SecondActivity:
+                Intent secondIntent = new Intent(this, typeof(SMSActivity));
+
+                // Pass some information to SecondActivity:
+                secondIntent.PutExtra("message", "Greetings from MainActivity!");
+
+                // Create a task stack builder to manage the back stack:
+                TaskStackBuilder stackBuilder = TaskStackBuilder.Create(this);
+
+                // Add all parents of SecondActivity to the stack: 
+                stackBuilder.AddParentStack(Java.Lang.Class.FromType(typeof(SMSActivity)));
+
+                // Push the intent that starts SecondActivity onto the stack:
+                stackBuilder.AddNextIntent(secondIntent);
+
+                // Obtain the PendingIntent for launching the task constructed by
+                // stackbuilder. The pending intent can be used only once (one shot):
+                const int pendingIntentId = 0;
+                PendingIntent pendingIntent =
+                stackBuilder.GetPendingIntent(pendingIntentId, 1073741824);
+
+                // Instantiate the builder and set notification elements, including 
+                // the pending intent:
+                Notification.Builder builder = new Notification.Builder(this)
+                .SetContentIntent(pendingIntent)
+                .SetContentTitle("Sample Notification")
+                .SetContentText("Hello World! This is my second action notification!")
+                .SetSmallIcon(Resource.Drawable.Icon);
 
                 // Build the notification:
-                NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
-                    .SetAutoCancel(true)                    // Dismiss from the notif. area when clicked
-                    .SetContentTitle("Warning : Level 5 Alerts.")      // Set its title
-                    .SetVibrate(new long[] { 1000, 1000, 1000, 1000, 1000 })
-                    .SetSmallIcon(Resource.Drawable.Icon)  //  this icon
-                    .SetContentText("MCOL level 5 alerts are present. Click this notification to notify other team members."); // The message to display.                  
+                Notification notification = builder.Build();
 
-                // Finally, publish the notification:
+                // Get the notification manager:
                 NotificationManager notificationManager =
-                    (NotificationManager)GetSystemService(Context.NotificationService);
-                notificationManager.Notify(1, builder.Build());
+                GetSystemService(Context.NotificationService) as NotificationManager;
+
+                // Publish the notification:
+                const int notificationId = 0;
+                notificationManager.Notify(notificationId, notification);
             }
         }
 
         private void CheckIfDataIsExpired()
         {
+            int DataExpiredNotificationId = 1001;
             //If expired
             if (McolStatsFragment.expired)
             {
@@ -97,7 +121,7 @@ namespace MobileDashboard
                 // Finally, publish the notification:
                 NotificationManager notificationManager =
                     (NotificationManager)GetSystemService(Context.NotificationService);
-                notificationManager.Notify(1, builder.Build());
+                notificationManager.Notify(DataExpiredNotificationId, builder.Build());
             }
         }
 

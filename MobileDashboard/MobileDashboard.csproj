@@ -137,6 +137,7 @@
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SharedClass\DataExpiry.cs" />
+    <Compile Include="SMSActivity.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
