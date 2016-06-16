@@ -89,6 +89,5 @@ namespace MobileDashboard.JsonAdapters
     public class McolStats
     {
         public Stat stat { get; set; }
-        public DateTime ExpiryDate { get; set; }
     }
 }

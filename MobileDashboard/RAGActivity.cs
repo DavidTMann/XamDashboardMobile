@@ -19,11 +19,10 @@ namespace MobileDashboard
     [Activity(Label = "RAG Stats")]
     public class RAGActivity : Activity
     {
-        DataExpiry da = new DataExpiry();
+        DataExpiry dt = new DataExpiry();
         private PlotView plotViewModel;
         private LinearLayout mLLayoutModel;
         public PlotModel MyModel { get; set; }
-        private bool expired = false;
 
         protected override void OnCreate(Bundle savedInstanceState)
         {
@@ -53,17 +52,17 @@ namespace MobileDashboard
                 }
             }           
 
-            //Add expiry date to 1st item in RagJson list 
-            //Currently adds 2 mins to expiry date UTC is 1 hr behind
-            ragObj[0].ExpiryDate = DataExpiry.currentTime.AddMinutes(62);
-
+            
             var ragListView = FindViewById<ListView>(Resource.Id.listView);
 
+            //Check to see if data has expired
+            dt.IsExpired(DataExpiry.expiryDate);
+            //Check to see if DataExpiry.dataExpired is true if so disable data  
             CheckExpiryRagData(ragObj, ragListView);
 
             ragListView.Adapter = new RagJsonAdapter(this, ragObj);
-
-            if (!expired)
+            
+            if (!DataExpiry.dataExpired)
             {
                 //Pie chart stuff; come back to this when Im not stressed
                 List<int> appRagScores = new List<int>();
@@ -147,10 +146,9 @@ namespace MobileDashboard
         //Run this method, if expired makes data null
         private void CheckExpiryRagData(List<RagJson> ragObj, ListView ragListView)
         {
-            if (da.IsExpired(ragObj[0].ExpiryDate))
+            if (DataExpiry.dataExpired)
             {
                 ragObj = null;
-                expired = true;
                 ragListView.Visibility = ViewStates.Gone;
 
                 ShowAlert("Sorry, the data has expired.", false);

@@ -10,6 +10,7 @@ using System.Text;
 using Newtonsoft.Json;
 using MobileDashboard.JsonAdapters;
 using System.Collections.Generic;
+using MobileDashboard.SharedClass;
 
 namespace MobileDashboard
 {
@@ -17,6 +18,7 @@ namespace MobileDashboard
     {
         public static bool Level5Notify = false;
         public static bool AlreadyNotified = false;
+        DataExpiry dt = new DataExpiry();
 
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
@@ -36,9 +38,24 @@ namespace MobileDashboard
 
             ListView mcolAlertsListView = rootView.FindViewById<ListView>(Resource.Id.mcolAlertsListView);
 
-            mcolAlertsListView.Adapter = new McolAlertsAdapter(this.Activity, mcolAlerts);
+            //Check to see if data has expired
+            dt.IsExpired(DataExpiry.expiryDate);
+            //Check to see if DataExpiry.dataExpired is true if so disable data  
+            ExpireAlertsData(mcolAlerts, mcolAlertsListView);
 
+            mcolAlertsListView.Adapter = new McolAlertsAdapter(this.Activity, mcolAlerts);
+            
             return rootView;
+        }
+
+        //Run this method, if expired makes data null
+        private void ExpireAlertsData(List<McolAlerts> mcolAlerts, ListView mcolAlertsListView)
+        {
+            if (DataExpiry.dataExpired)
+            {
+                mcolAlerts = null;
+                mcolAlertsListView.Visibility = ViewStates.Gone;
+            }
         }
 
         public string GetMcolServAlertsJson()

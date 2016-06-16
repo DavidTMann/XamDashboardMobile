@@ -55,7 +55,7 @@ namespace MobileDashboard
                 StartActivity(mcolTabbedDash);
             };
 
-            var smsUri = Android.Net.Uri.Parse("smsto:07468415831");
+            var smsUri = Android.Net.Uri.Parse("smsto:07468415831, 07468708238");
             var smsIntent = new Intent(Intent.ActionSendto, smsUri);
             smsIntent.PutExtra("sms_body", "MCOL Level 5 Alert");
             StartActivity(smsIntent);

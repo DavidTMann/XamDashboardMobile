@@ -17,8 +17,7 @@ namespace MobileDashboard
 {
     class McolStatsFragment : Android.Support.V4.App.Fragment
     {
-        DataExpiry da = new DataExpiry();
-        public static bool expired = false;
+        DataExpiry dt = new DataExpiry();
 
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
@@ -36,15 +35,13 @@ namespace MobileDashboard
 
             //Deserialize json and put it in list view
             var mcolStats = JsonConvert.DeserializeObject<List<McolStats>>(json);
-
-            //Add expiry date to mcolStats
-            //Currently adds 10 minutes, change to 1 hour after testing UTC are an hour behind
-            mcolStats[0].ExpiryDate = DataExpiry.currentTime.AddMinutes(62);
-
+                        
             ListView mcolListView = rootView.FindViewById<ListView>(Resource.Id.mcolListView);
 
-            //Checks expiry date
-            CheckExpiryStatsData( mcolStats, mcolListView, rootView);
+            //Check to see if data has expired
+            dt.IsExpired(DataExpiry.expiryDate);
+            //Check to see if DataExpiry.dataExpired is true if so disable data  
+            ExpireStatsData(mcolStats, mcolListView);
 
             mcolListView.Adapter = new McolStatsAdapter(this.Activity, mcolStats);
 
@@ -52,16 +49,12 @@ namespace MobileDashboard
         }
 
         //Run this method, if expired makes data null
-        private void CheckExpiryStatsData(List<McolStats> mcolStats, ListView mcolListView, View rootView)
+        private void ExpireStatsData(List<McolStats> mcolObj, ListView mcolListView)
         {
-            if (da.IsExpired(mcolStats[0].ExpiryDate))
+            if (DataExpiry.dataExpired)
             {
-                expired = true;
-                mcolStats = null;
-                mcolListView.Visibility = ViewStates.Gone;
-
-                TextView statsExpiredTxt = rootView.FindViewById<TextView>(Resource.Id.statsExpiredTxt);
-                statsExpiredTxt.Visibility = ViewStates.Visible;
+                mcolObj = null;
+                mcolListView.Visibility = ViewStates.Gone;                
             }
         }
 

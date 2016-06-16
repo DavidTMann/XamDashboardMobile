@@ -18,6 +18,7 @@ using System.IO;
 using Newtonsoft.Json;
 using Android.Preferences;
 using Android.Graphics;
+using MobileDashboard.SharedClass;
 
 namespace MobileDashboard
 {
@@ -102,7 +103,7 @@ namespace MobileDashboard
         {
             int DataExpiredNotificationId = 1001;
             //If expired
-            if (McolStatsFragment.expired)
+            if (DataExpiry.dataExpired)
             {
                 ShowAlert("Sorry, the data has expired.");
 

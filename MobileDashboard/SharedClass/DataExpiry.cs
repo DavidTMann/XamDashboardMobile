@@ -15,19 +15,20 @@ namespace MobileDashboard.SharedClass
     public class DataExpiry
     {
         //1 hr behind
-        public static DateTime currentTime = DateTime.UtcNow;
+        public static DateTime currentTime = DateTime.UtcNow.AddHours(1);
+        public static bool dataExpired = false;
+        public static DateTime expiryDate;
 
-        //If expiry date is passed return true and make obj = null and show alert.
-        public bool IsExpired(DateTime expiryDate)
-        {
-            //UTC is 1 hr behind
+        //If expiry date is dataExpired = true
+        public void IsExpired(DateTime expiryDate)
+        {            
             if (expiryDate < DateTime.UtcNow.AddHours(1))
             {
-                return true;
+                dataExpired = true;
             }
             else
             {
-                return false;
+                dataExpired = false;
             }
         }
     }

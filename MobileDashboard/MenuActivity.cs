@@ -13,12 +13,15 @@ using System.Net;
 using System.IO;
 using Newtonsoft.Json;
 using MobileDashboard.JsonAdapters;
+using MobileDashboard.SharedClass;
 
 namespace MobileDashboard
 {
     [Activity(Label = "Menu")]
     public class MenuActivity : Activity
     {
+        DataExpiry dt = new DataExpiry();
+
         protected override void OnCreate(Bundle savedInstanceState)
         {          
             base.OnCreate(savedInstanceState);
@@ -41,6 +44,7 @@ namespace MobileDashboard
                 userLabel.Text += userTxt + "!";
             }
 
+            //Menu buttons
             Button ragBtn = FindViewById<Button>(Resource.Id.gotoRagBtn);
             ragBtn.Click += delegate
             {
@@ -64,8 +68,11 @@ namespace MobileDashboard
                 GetMcolAlerts();
                 //Sends if alert lvl5
                 SendLevel5Alert(userTxt);
-            }           
+            }
 
+            //Check to see if data has expired
+            dt.IsExpired(DataExpiry.expiryDate);
+            //Check to see if DataExpiry.dataExpired is true if so disable data
         }
 
         private void GetMcolAlerts()
@@ -76,6 +83,10 @@ namespace MobileDashboard
 
             //Deserialize json and put it in list view
             var mcolAlerts = JsonConvert.DeserializeObject<List<McolAlerts>>(json);
+
+            //THIS ADDS EXPIRY DATE TO MCOL ALERT; THIS DECIDES WHEN ALL DATA WILL EXPIRE.
+            //UTC TIME IS 1 HR BEHIND, CURRENTLY EXPIRES AFTER 2 MINUTES
+            DataExpiry.expiryDate = DataExpiry.currentTime.AddMinutes(3);
 
             //Check to see if level 5 alerts in there
             foreach (var al in mcolAlerts)
