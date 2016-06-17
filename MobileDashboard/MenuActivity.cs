@@ -86,7 +86,7 @@ namespace MobileDashboard
 
             //THIS ADDS EXPIRY DATE TO MCOL ALERT; THIS DECIDES WHEN ALL DATA WILL EXPIRE.
             //UTC TIME IS 1 HR BEHIND, CURRENTLY EXPIRES AFTER 2 MINUTES
-            DataExpiry.expiryDate = DataExpiry.currentTime.AddMinutes(3);
+            DataExpiry.expiryDate = DataExpiry.currentTime.AddMinutes(1);
 
             //Check to see if level 5 alerts in there
             foreach (var al in mcolAlerts)

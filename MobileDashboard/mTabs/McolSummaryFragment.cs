@@ -11,6 +11,7 @@ using Android.Widget;
 using Android.Support.V4.App;
 using Newtonsoft.Json;
 using MobileDashboard.JsonAdapters;
+using MobileDashboard.SharedClass;
 
 namespace MobileDashboard.mTabs
 {
@@ -18,6 +19,7 @@ namespace MobileDashboard.mTabs
     {
         MenuActivity m = new MenuActivity();
         McolAlertsFragment a = new McolAlertsFragment();
+        DataExpiry dt = new DataExpiry();
 
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
@@ -45,11 +47,6 @@ namespace MobileDashboard.mTabs
 
             //Set rag button colour
             SetRagButtonColour(ragScoreBtn, ragObj);
-            
-            //MCOL Alerts for summary buttons
-            Button summAlertsLv3Btn = rootView.FindViewById<Button>(Resource.Id.mcolSummAlertLv3);
-            Button summAlertsLv4Btn = rootView.FindViewById<Button>(Resource.Id.mcolSummAlertLv4);
-            Button summAlertsLv5Btn = rootView.FindViewById<Button>(Resource.Id.mcolSummAlertLv5);
 
             //Get server alert json for MCOL
             string alertJson = a.GetMcolServAlertsJson();
@@ -57,6 +54,14 @@ namespace MobileDashboard.mTabs
             //Deserialize into alert c# obj
             var mcolAlerts = JsonConvert.DeserializeObject<List<McolAlerts>>(alertJson);
 
+            
+
+            //MCOL Alerts for summary buttons
+            Button summAlertsLv3Btn = rootView.FindViewById<Button>(Resource.Id.mcolSummAlertLv3);
+            Button summAlertsLv4Btn = rootView.FindViewById<Button>(Resource.Id.mcolSummAlertLv4);
+            Button summAlertsLv5Btn = rootView.FindViewById<Button>(Resource.Id.mcolSummAlertLv5);
+            
+            //Alert counters
             int lv3AlertCount = 0;
             int lv4AlertCount = 0;
             int lv5AlertCount = 0;
@@ -84,6 +89,12 @@ namespace MobileDashboard.mTabs
             summAlertsLv4Btn.Text = string.Format("Level 4 Alerts : {0}", lv4AlertCount.ToString());
             summAlertsLv5Btn.Text = string.Format("Level 5 Alerts : {0}", lv5AlertCount.ToString());
 
+            //DATA EXPIRY
+            //Check to see if data has expired
+            dt.IsExpired(DataExpiry.expiryDate);
+            //Check to see if DataExpiry.dataExpired is true if so disable data  
+            ExpireSummaryData(ragObj, mcolAlerts, ragScoreBtn, summAlertsLv3Btn, summAlertsLv4Btn, summAlertsLv5Btn);
+
             Button menuBtn = rootView.FindViewById<Button>(Resource.Id.summBackToMenuBtn);
             menuBtn.Click += delegate
             {
@@ -91,9 +102,23 @@ namespace MobileDashboard.mTabs
                 Intent menu = new Intent(this.Activity, typeof(MenuActivity));
                 StartActivity(menu);
             };
-
+            
             return rootView;
-        } 
+        }
+
+        //Expires summary data if data has expired
+        private void ExpireSummaryData(List<RagJson> ragObj, List<McolAlerts> mcolObj, Button ragScoreBtn, Button lvl3AlertBtn, Button lvl4AlertBtn, Button lvl5AlertBtn)
+        {
+            if (DataExpiry.dataExpired)
+            {
+                ragObj = null;
+                mcolObj = null;
+                ragScoreBtn.Text = "Data Expired";
+                lvl3AlertBtn.Text = "Data Expired";
+                lvl4AlertBtn.Text = "Data Expired";
+                lvl5AlertBtn.Text = "Data Expired";
+            }
+        }        
 
         //Decides what colour to set RAG button
         private void SetRagButtonColour(Button ragScoreBtn, List<RagJson> ragObj)

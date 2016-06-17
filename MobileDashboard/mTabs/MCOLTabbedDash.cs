@@ -50,53 +50,7 @@ namespace MobileDashboard
             //Checks if data is expired
             CheckIfDataIsExpired();
             
-        }
-
-        public void SendLevel5Alert()
-        {  
-            if (McolAlertsFragment.Level5Notify)
-            {
-                // Setup an intent for SecondActivity:
-                Intent secondIntent = new Intent(this, typeof(SMSActivity));
-
-                // Pass some information to SecondActivity:
-                secondIntent.PutExtra("message", "Greetings from MainActivity!");
-
-                // Create a task stack builder to manage the back stack:
-                TaskStackBuilder stackBuilder = TaskStackBuilder.Create(this);
-
-                // Add all parents of SecondActivity to the stack: 
-                stackBuilder.AddParentStack(Java.Lang.Class.FromType(typeof(SMSActivity)));
-
-                // Push the intent that starts SecondActivity onto the stack:
-                stackBuilder.AddNextIntent(secondIntent);
-
-                // Obtain the PendingIntent for launching the task constructed by
-                // stackbuilder. The pending intent can be used only once (one shot):
-                const int pendingIntentId = 0;
-                PendingIntent pendingIntent =
-                stackBuilder.GetPendingIntent(pendingIntentId, 1073741824);
-
-                // Instantiate the builder and set notification elements, including 
-                // the pending intent:
-                Notification.Builder builder = new Notification.Builder(this)
-                .SetContentIntent(pendingIntent)
-                .SetContentTitle("Sample Notification")
-                .SetContentText("Hello World! This is my second action notification!")
-                .SetSmallIcon(Resource.Drawable.Icon);
-
-                // Build the notification:
-                Notification notification = builder.Build();
-
-                // Get the notification manager:
-                NotificationManager notificationManager =
-                GetSystemService(Context.NotificationService) as NotificationManager;
-
-                // Publish the notification:
-                const int notificationId = 0;
-                notificationManager.Notify(notificationId, notification);
-            }
-        }
+        }        
 
         private void CheckIfDataIsExpired()
         {
