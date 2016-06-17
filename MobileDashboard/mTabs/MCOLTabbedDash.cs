@@ -37,17 +37,16 @@ namespace MobileDashboard
             if (isFirstRun)
             {
                 //Figure out how to run it only once            
-                ShowAlert("Swipe right to view other MCOL data.");
+                ShowAlert("Swipe right to view other MCOL data.", false);
                 isFirstRun = false;
             }
-            
+
             var adapter =
             new TabsPageAdapter(SupportFragmentManager, new McolSummaryFragment(), new McolStatsFragment(), new McolAlertsFragment(), new McolBatchFragment());
 
             var viewPager = FindViewById<Android.Support.V4.View.ViewPager>(Resource.Id.mcolViewPager);
             viewPager.Adapter = adapter;
-
-
+            
             //Checks if data is expired
             CheckIfDataIsExpired();
             
@@ -105,7 +104,7 @@ namespace MobileDashboard
             //If expired
             if (DataExpiry.dataExpired)
             {
-                ShowAlert("Sorry, the data has expired.");
+                ShowAlert("Sorry, the data has expired.", false);
 
                 //Notification to say data has expired
                 // Construct a back stack for cross-task navigation:
@@ -126,17 +125,40 @@ namespace MobileDashboard
             }
         }
 
-        public void ShowAlert(string str)
+        public void ShowAlert(string str, bool yesAndNo)
         {
-            AlertDialog.Builder alert = new AlertDialog.Builder(this);
-            alert.SetTitle(str);
-            alert.SetPositiveButton("OK", (senderAlert, args) => {
-                // write your own set of instructions
-            });            
-            //run the alert in UI thread to display in the screen
-            RunOnUiThread(() => {
-                alert.Show();
-            });
+            if (yesAndNo)
+            {
+                AlertDialog.Builder alert = new AlertDialog.Builder(this);
+                alert.SetTitle(str);
+                alert.SetPositiveButton("Yes", (sender, args) =>
+                {
+                    //Go to RAG Score                   
+                    Intent ragActivity = new Intent(this.ApplicationContext, typeof(RAGActivity));
+                    StartActivity(ragActivity);
+                });
+                alert.SetNegativeButton("No", (sender, args) =>
+                {
+                    // User pressed no do nothing
+                });
+
+                //run the alert in UI thread to display in the screen
+                RunOnUiThread(() => {
+                    alert.Show();
+                });
+            }
+            else if (!yesAndNo)
+            {
+                AlertDialog.Builder alert = new AlertDialog.Builder(this);
+                alert.SetTitle(str);
+                alert.SetPositiveButton("OK", (senderAlert, args) => {
+                    // write your own set of instructions
+                });
+                //run the alert in UI thread to display in the screen
+                RunOnUiThread(() => {
+                    alert.Show();
+                });
+            }            
         }
     }
 }
