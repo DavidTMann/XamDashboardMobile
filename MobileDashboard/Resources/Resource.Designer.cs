@@ -2041,11 +2041,11 @@ namespace MobileDashboard
 			// aapt resource value: 0x7f090090
 			public const int ActivSeshTitle = 2131296400;
 			
-			// aapt resource value: 0x7f0900ba
-			public const int AppName = 2131296442;
+			// aapt resource value: 0x7f0900bd
+			public const int AppName = 2131296445;
 			
-			// aapt resource value: 0x7f0900b5
-			public const int AppTitle = 2131296437;
+			// aapt resource value: 0x7f0900b7
+			public const int AppTitle = 2131296439;
 			
 			// aapt resource value: 0x7f090098
 			public const int AvgReqTime = 2131296408;
@@ -2053,11 +2053,11 @@ namespace MobileDashboard
 			// aapt resource value: 0x7f09008f
 			public const int AvgTitle = 2131296399;
 			
-			// aapt resource value: 0x7f0900bc
-			public const int BuName = 2131296444;
+			// aapt resource value: 0x7f0900bf
+			public const int BuName = 2131296447;
 			
-			// aapt resource value: 0x7f0900b7
-			public const int BuTitle = 2131296439;
+			// aapt resource value: 0x7f0900b9
+			public const int BuTitle = 2131296441;
 			
 			// aapt resource value: 0x7f090094
 			public const int DateTime = 2131296404;
@@ -2083,11 +2083,11 @@ namespace MobileDashboard
 			// aapt resource value: 0x7f090087
 			public const int PriorityAlerts = 2131296391;
 			
-			// aapt resource value: 0x7f0900bb
-			public const int Rating = 2131296443;
+			// aapt resource value: 0x7f0900be
+			public const int Rating = 2131296446;
 			
-			// aapt resource value: 0x7f0900b6
-			public const int RatingTitle = 2131296438;
+			// aapt resource value: 0x7f0900b8
+			public const int RatingTitle = 2131296440;
 			
 			// aapt resource value: 0x7f09007f
 			public const int ServAlTitle = 2131296383;
@@ -2341,14 +2341,11 @@ namespace MobileDashboard
 			// aapt resource value: 0x7f0900b1
 			public const int line3 = 2131296433;
 			
-			// aapt resource value: 0x7f0900b9
-			public const int linearLayoutModel = 2131296441;
-			
 			// aapt resource value: 0x7f090014
 			public const int listMode = 2131296276;
 			
-			// aapt resource value: 0x7f0900b8
-			public const int listView = 2131296440;
+			// aapt resource value: 0x7f0900bb
+			public const int listView = 2131296443;
 			
 			// aapt resource value: 0x7f090049
 			public const int list_item = 2131296329;
@@ -2434,6 +2431,15 @@ namespace MobileDashboard
 			// aapt resource value: 0x7f09005c
 			public const int radio = 2131296348;
 			
+			// aapt resource value: 0x7f0900b6
+			public const int ragAppsToggle = 2131296438;
+			
+			// aapt resource value: 0x7f0900bc
+			public const int ragBackToMenuBtn = 2131296444;
+			
+			// aapt resource value: 0x7f0900ba
+			public const int refresherRag = 2131296442;
+			
 			// aapt resource value: 0x7f090038
 			public const int right = 2131296312;
 			
@@ -2496,6 +2502,9 @@ namespace MobileDashboard
 			
 			// aapt resource value: 0x7f09001a
 			public const int showHome = 2131296282;
+			
+			// aapt resource value: 0x7f0900b5
+			public const int showRagApps = 2131296437;
 			
 			// aapt resource value: 0x7f09001b
 			public const int showTitle = 2131296283;

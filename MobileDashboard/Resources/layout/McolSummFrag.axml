@@ -15,7 +15,7 @@
         <TextView
             android:text="MCOL RAG SCORE"
             android:layout_width="match_parent"
-            android:layout_height="64.0dp"
+            android:layout_height="59.5dp"
             android:id="@+id/mcolSummRagTitle"
             android:textSize="15dp"
             android:gravity="center"
@@ -32,7 +32,7 @@
     <TextView
         android:text="MCOL Alert Summary"
         android:layout_width="match_parent"
-        android:layout_height="82.5dp"
+        android:layout_height="79.0dp"
         android:id="@+id/mcolSummAlertTitle"
         android:textSize="15dp"
         android:gravity="center"
@@ -42,7 +42,7 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="258.0dp">
+        android:layout_height="wrap_content">
         <Button
             android:id="@+id/mcolSummAlertLv3"
             android:layout_width="216.0dp"

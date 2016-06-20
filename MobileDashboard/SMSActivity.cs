@@ -40,10 +40,9 @@ namespace MobileDashboard
             Button ragBtn = FindViewById<Button>(Resource.Id.gotoRagBtn);
             ragBtn.Click += delegate
             {
-                //Go to rag application page
-                MenuActivity men = new MenuActivity();                    
+                //Go to rag application page                 
                 Intent rag = new Intent(this.ApplicationContext, typeof(RAGActivity));
-                rag.PutExtra("json", men.GetRagJson());
+                
                 StartActivity(rag);
             };
 

@@ -50,7 +50,7 @@ namespace MobileDashboard
             {
                 //Go to rag application page                    
                 Intent rag = new Intent(this.ApplicationContext, typeof(RAGActivity));
-                rag.PutExtra("json", GetRagJson());
+                
                 StartActivity(rag);
             };
 
@@ -85,8 +85,8 @@ namespace MobileDashboard
             var mcolAlerts = JsonConvert.DeserializeObject<List<McolAlerts>>(json);
 
             //THIS ADDS EXPIRY DATE TO MCOL ALERT; THIS DECIDES WHEN ALL DATA WILL EXPIRE.
-            //UTC TIME IS 1 HR BEHIND, CURRENTLY EXPIRES AFTER 2 MINUTES
-            DataExpiry.expiryDate = DataExpiry.currentTime.AddMinutes(1);
+            //UTC TIME IS 1 HR BEHIND, CURRENTLY EXPIRES AFTER 5 MINUTES
+            DataExpiry.expiryDate = DataExpiry.currentTime.AddMinutes(5);
 
             //Check to see if level 5 alerts in there
             foreach (var al in mcolAlerts)
@@ -137,29 +137,6 @@ namespace MobileDashboard
                 //Once notified we can stop sending alert for this session
                 McolAlertsFragment.AlreadyNotified = true;
             }
-        }
-
-        public string GetRagJson()
-        {
-            var request = WebRequest.Create(@"https://www.warren-ayling.me.uk:8443/api/dashboard/rag");
-            request.ContentType = "application/json; charset=utf-8";
-
-            //Below needs to be commented out if i'm debugging on android device
-            //request.Proxy = new WebProxy("proxy.logica.com", 80);
-
-            string json;
-            var response = (HttpWebResponse)request.GetResponse();
-
-            using (var sr = new StreamReader(response.GetResponseStream()))
-            {
-                json = sr.ReadToEnd();
-
-                //Remove \ and quotes wrapped round json
-                json = json.Replace(@"\", string.Empty);
-                json = json.Substring(1, json.Length - 2);
-
-                return json;
-            }
-        }
+        }        
     }
 }

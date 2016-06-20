@@ -12,21 +12,27 @@ using Android.Support.V4.App;
 using Newtonsoft.Json;
 using MobileDashboard.JsonAdapters;
 using MobileDashboard.SharedClass;
+using Android.Support.V4.Widget;
 
 namespace MobileDashboard.mTabs
 {
     class McolSummaryFragment : Fragment
     {
-        MenuActivity m = new MenuActivity();
+        RAGActivity rag = new RAGActivity();
         McolAlertsFragment a = new McolAlertsFragment();
         DataExpiry dt = new DataExpiry();
+
+        //Alert counters
+        int lv3AlertCount = 0;
+        int lv4AlertCount = 0;
+        int lv5AlertCount = 0;
 
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
             View rootView = inflater.Inflate(Resource.Layout.McolSummFrag, container, false);
 
             //Get rag json from 
-            string ragJson = m.GetRagJson();
+            string ragJson = rag.GetRagJson();
 
             //Deserialize json into c# obj
             var ragObj = JsonConvert.DeserializeObject<List<RagJson>>(ragJson);
@@ -47,25 +53,19 @@ namespace MobileDashboard.mTabs
 
             //Set rag button colour
             SetRagButtonColour(ragScoreBtn, ragObj);
-
+            
             //Get server alert json for MCOL
             string alertJson = a.GetMcolServAlertsJson();
 
             //Deserialize into alert c# obj
             var mcolAlerts = JsonConvert.DeserializeObject<List<McolAlerts>>(alertJson);
-
-            
+                        
 
             //MCOL Alerts for summary buttons
             Button summAlertsLv3Btn = rootView.FindViewById<Button>(Resource.Id.mcolSummAlertLv3);
             Button summAlertsLv4Btn = rootView.FindViewById<Button>(Resource.Id.mcolSummAlertLv4);
             Button summAlertsLv5Btn = rootView.FindViewById<Button>(Resource.Id.mcolSummAlertLv5);
             
-            //Alert counters
-            int lv3AlertCount = 0;
-            int lv4AlertCount = 0;
-            int lv5AlertCount = 0;
-
             foreach (var al in mcolAlerts)
             {
                 if (al.serverAlerts.priority == "Level 3")
@@ -89,6 +89,9 @@ namespace MobileDashboard.mTabs
             summAlertsLv4Btn.Text = string.Format("Level 4 Alerts : {0}", lv4AlertCount.ToString());
             summAlertsLv5Btn.Text = string.Format("Level 5 Alerts : {0}", lv5AlertCount.ToString());
 
+            //Set alert background btn colour
+            SetAlertBackgroundColour(summAlertsLv3Btn, summAlertsLv4Btn, summAlertsLv5Btn);
+
             //DATA EXPIRY
             //Check to see if data has expired
             dt.IsExpired(DataExpiry.expiryDate);
@@ -101,8 +104,8 @@ namespace MobileDashboard.mTabs
                 //Go to mcol tabbed dash page                    
                 Intent menu = new Intent(this.Activity, typeof(MenuActivity));
                 StartActivity(menu);
-            };
-            
+            };            
+
             return rootView;
         }
 
@@ -141,6 +144,74 @@ namespace MobileDashboard.mTabs
             if (ragObj[0].RAGStatus == 100)
             {
                 ragScoreBtn.SetBackgroundColor(Android.Graphics.Color.Green);
+            }
+
+        }
+
+        //Set button background colour depending on num of alerts
+        private void SetAlertBackgroundColour(Button lv3AlertBtn, Button lv4AlertBtn, Button lv5AlertBtn)
+        {
+            //Level 3 Alert
+            if (lv3AlertCount == 0)
+            {
+                lv3AlertBtn.SetBackgroundColor(Android.Graphics.Color.Green);
+            }
+
+            if (lv3AlertCount < 15 && lv3AlertCount > 0)
+            {
+                lv3AlertBtn.SetBackgroundColor(Android.Graphics.Color.YellowGreen);
+            }
+
+            if (lv3AlertCount > 15 && lv3AlertCount < 50)
+            {
+                lv3AlertBtn.SetBackgroundColor(Android.Graphics.Color.DarkOrange);
+            }
+
+            if (lv3AlertCount > 50)
+            {
+                lv3AlertBtn.SetBackgroundColor(Android.Graphics.Color.OrangeRed);
+            }
+
+            //Level 4
+            if (lv4AlertCount == 0)
+            {
+                lv4AlertBtn.SetBackgroundColor(Android.Graphics.Color.Green);
+            }
+
+            if (lv4AlertCount < 15 && lv4AlertCount > 0)
+            {
+                lv4AlertBtn.SetBackgroundColor(Android.Graphics.Color.YellowGreen);
+            }
+
+            if (lv4AlertCount > 15 && lv4AlertCount < 50)
+            {
+                lv4AlertBtn.SetBackgroundColor(Android.Graphics.Color.DarkOrange);
+            }
+
+            if (lv4AlertCount > 50)
+            {
+                lv4AlertBtn.SetBackgroundColor(Android.Graphics.Color.OrangeRed);
+            }
+
+            //Level 5
+            if (lv4AlertCount == 0)
+            {
+                lv4AlertBtn.SetBackgroundColor(Android.Graphics.Color.Green);
+            }
+
+            if (lv4AlertCount < 3 && lv4AlertCount > 0)
+            {
+                lv4AlertBtn.SetBackgroundColor(Android.Graphics.Color.YellowGreen);
+            }
+
+            if (lv4AlertCount > 3 && lv4AlertCount < 9)
+            {
+                lv4AlertBtn.SetBackgroundColor(Android.Graphics.Color.DarkOrange);
+            }
+
+            if (lv4AlertCount > 10)
+            {
+                lv4AlertBtn.SetBackgroundColor(Android.Graphics.Color.OrangeRed);
             }
 
         }

@@ -7,6 +7,20 @@
     android:minHeight="25px">
     <LinearLayout
         android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp">
+        <TextView
+            android:id="@+id/showRagApps"
+            android:layout_width="135.5dp"
+            android:layout_height="wrap_content"
+            android:text="Show all app's" />
+        <ToggleButton
+            android:layout_width="85.0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/ragAppsToggle" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content">
         <TextView
             android:id="@+id/AppTitle"
@@ -28,18 +42,28 @@
             android:layout_weight="1"
             android:text="BU" />
     </LinearLayout>
-    <ListView
-        android:id="@+id/listView"
-        android:layout_width="fill_parent"
-        android:layout_height="152.5dp" />
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/refresherRag"
+        android:layout_width="match_parent"
+        android:layout_height="386.5dp">
+        <ListView
+            android:id="@+id/listView"
+            android:layout_width="fill_parent"
+            android:layout_height="152.5dp" />
+    </android.support.v4.widget.SwipeRefreshLayout>
     <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="161.0dp"
+        android:layout_weight="1"
+        android:gravity="center|bottom"
         android:orientation="vertical"
-        android:minWidth="25px"
-        android:minHeight="25px"
-        android:layout_width="fill_parent"
-        android:layout_height="298.5dp"
-        android:background="@android:color/black"
-        android:id="@+id/linearLayoutModel"
-        android:layout_marginLeft="20dp"
-        android:layout_marginTop="0.0dp" />
+        android:layout_marginTop="0.0dp">
+        <Button
+            android:id="@+id/ragBackToMenuBtn"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="145dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal|center"
+            android:text="Back to menu" />
+    </LinearLayout>
 </LinearLayout>

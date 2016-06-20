@@ -7,6 +7,7 @@ using Android.App;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("MobileDashboard")]
+[assembly: Application(Theme = "@android:style/Theme.Material.Light.DarkActionBar")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]

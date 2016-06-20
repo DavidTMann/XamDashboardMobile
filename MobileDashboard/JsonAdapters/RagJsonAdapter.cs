@@ -40,6 +40,12 @@ namespace MobileDashboard.JsonAdapters
                 view = inflater.Inflate(Resource.Layout.RAGrow, parent, false);
             }
 
+            //Nasty hack as ListView has diff colour gap
+            if (item.Name == "Casework Support")
+            {
+                item.Name = "Casework";
+            }
+
             TextView appName = view.FindViewById<TextView>(Resource.Id.AppName);
             TextView rating = view.FindViewById<TextView>(Resource.Id.Rating);
             TextView buName = view.FindViewById<TextView>(Resource.Id.BuName);
