@@ -22,6 +22,7 @@ namespace MobileDashboard
     {
         DataExpiry dt = new DataExpiry();
         List<RagJson> remaindingRagApps = new List<RagJson>();
+        private bool addedRagApps = false;
 
         protected override void OnCreate(Bundle savedInstanceState)
         {
@@ -50,11 +51,9 @@ namespace MobileDashboard
             ragTogglBtn.Click += (o, e) => {
                 // Perform action on clicks
                 if (ragTogglBtn.Checked)
-                {
-                    if (ragObj.Count != 40)
-                    {
-                        ragObj.AddRange(remaindingRagApps);
-                    }
+                {                                           
+                    ragObj.AddRange(remaindingRagApps);
+                    addedRagApps = true;                   
 
                     //Check to see if data has expired
                     dt.IsExpired(DataExpiry.expiryDate);
@@ -76,11 +75,10 @@ namespace MobileDashboard
             var refresher = FindViewById<SwipeRefreshLayout>(Resource.Id.refresherRag);
             refresher.SetColorSchemeResources(Android.Resource.Color.HoloBlueLight, Android.Resource.Color.HoloGreenLight, Android.Resource.Color.HoloOrangeLight, Android.Resource.Color.HoloRedLight);
 
-            refresher.Refresh += delegate {
-                //Go to rag application page                    
-                Intent rag = new Intent(this.ApplicationContext, typeof(RAGActivity));
-
-                StartActivity(rag);
+            refresher.Refresh += delegate
+            {
+                //Refresh list view
+                RefreshListView(ragObj, ragListView);
             };
             
             if (!DataExpiry.dataExpired)
@@ -105,6 +103,18 @@ namespace MobileDashboard
 
         }
 
+        private void RefreshListView(List<RagJson> ragObj, ListView ragListView)
+        {
+            //Check to see if data has expired
+            dt.IsExpired(DataExpiry.expiryDate);
+            //Check to see if DataExpiry.dataExpired is true if so disable data  
+            CheckExpiryRagData(ragObj, ragListView);
+
+            RagJsonAdapter ragAdapter = new RagJsonAdapter(this, ragObj);
+
+            ragListView.Adapter = ragAdapter;
+        }
+
         //Only keeps MCOL AND DARTS Apps, adds rest of apps to remaining rag apps
         private void RagOnlyShowMcolAndDarts(List<RagJson> ragObj, ListView ragListView)
         {
@@ -119,12 +129,13 @@ namespace MobileDashboard
                 if (!r.Name.Contains("MCOL") || (!r.Name.Contains("DARTS")))
                 {
                     ragObj.Remove(r);
-                    if (ragObj.Count != 40)
+                    
+                    if (!addedRagApps)
                     {
                         remaindingRagApps.Add(r);
-                    }                    
+                    }                                 
                 }
-            }
+            }            
 
             //Check to see if data has expired
             dt.IsExpired(DataExpiry.expiryDate);

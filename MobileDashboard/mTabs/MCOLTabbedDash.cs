@@ -42,7 +42,7 @@ namespace MobileDashboard
             }
 
             var adapter =
-            new TabsPageAdapter(SupportFragmentManager, new McolSummaryFragment(), new McolStatsFragment(), new McolAlertsFragment(), new McolBatchFragment());
+            new TabsPageAdapter(SupportFragmentManager, new McolSummaryFragment(), new McolStatsFragment(), new McolAlertsFragment());
 
             var viewPager = FindViewById<Android.Support.V4.View.ViewPager>(Resource.Id.mcolViewPager);
             viewPager.Adapter = adapter;

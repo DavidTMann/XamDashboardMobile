@@ -52,10 +52,6 @@ namespace MobileDashboard.mTabs
             {
                 title = "MCOL Alerts";
             }
-            if (position == 3)
-            {
-                title = "MCOL Batch";
-            }
 
             return new Java.Lang.String(title);
         }
