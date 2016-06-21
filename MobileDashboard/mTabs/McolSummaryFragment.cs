@@ -57,46 +57,46 @@ namespace MobileDashboard.mTabs
                         
 
             //MCOL Alerts for summary buttons
+            Button summAlertsLv1Btn = rootView.FindViewById<Button>(Resource.Id.mcolSummAlertLv1);
+            Button summAlertsLv2Btn = rootView.FindViewById<Button>(Resource.Id.mcolSummAlertLv2);
             Button summAlertsLv3Btn = rootView.FindViewById<Button>(Resource.Id.mcolSummAlertLv3);
-            Button summAlertsLv4Btn = rootView.FindViewById<Button>(Resource.Id.mcolSummAlertLv4);
-            Button summAlertsLv5Btn = rootView.FindViewById<Button>(Resource.Id.mcolSummAlertLv5);
 
             //Alert counters
+            int lv1AlertCount = 0;
+            int lv2AlertCount = 0;
             int lv3AlertCount = 0;
-            int lv4AlertCount = 0;
-            int lv5AlertCount = 0;
 
             foreach (var al in mcolAlerts)
             {
+                if (al.serverAlerts.priority == "Level 1")
+                {
+                    lv1AlertCount++;
+                }
+
+                if (al.serverAlerts.priority == "Level 2")
+                {
+                    lv2AlertCount++;
+                }
+
                 if (al.serverAlerts.priority == "Level 3")
                 {
                     lv3AlertCount++;
                 }
-
-                if (al.serverAlerts.priority == "Level 4")
-                {
-                    lv4AlertCount++;
-                }
-
-                if (al.serverAlerts.priority == "Level 5")
-                {
-                    lv5AlertCount++;
-                }
             }
 
             //Assign alert count to buttons
+            summAlertsLv1Btn.Text = string.Format("Level 1 Alerts : {0}", lv1AlertCount.ToString());
+            summAlertsLv2Btn.Text = string.Format("Level 2 Alerts : {0}", lv2AlertCount.ToString());
             summAlertsLv3Btn.Text = string.Format("Level 3 Alerts : {0}", lv3AlertCount.ToString());
-            summAlertsLv4Btn.Text = string.Format("Level 4 Alerts : {0}", lv4AlertCount.ToString());
-            summAlertsLv5Btn.Text = string.Format("Level 5 Alerts : {0}", lv5AlertCount.ToString());
 
             //Set alert background btn colour
-            SetAlertBackgroundColour(summAlertsLv3Btn, summAlertsLv4Btn, summAlertsLv5Btn, lv3AlertCount, lv4AlertCount, lv5AlertCount);
+            SetAlertBackgroundColour(summAlertsLv1Btn, summAlertsLv2Btn, summAlertsLv3Btn, lv1AlertCount, lv2AlertCount, lv3AlertCount);
 
             //DATA EXPIRY
             //Check to see if data has expired
             dt.IsExpired(DataExpiry.expiryDate);
             //Check to see if DataExpiry.dataExpired is true if so disable data  
-            ExpireSummaryData(ragObj, mcolAlerts, ragScoreBtn, summAlertsLv3Btn, summAlertsLv4Btn, summAlertsLv5Btn);
+            ExpireSummaryData(ragObj, mcolAlerts, ragScoreBtn, summAlertsLv1Btn, summAlertsLv2Btn, summAlertsLv3Btn);
 
             Button menuBtn = rootView.FindViewById<Button>(Resource.Id.summBackToMenuBtn);
             menuBtn.Click += delegate
@@ -149,9 +149,51 @@ namespace MobileDashboard.mTabs
         }
 
         //Set button background colour depending on num of alerts
-        private void SetAlertBackgroundColour(Button lv3AlertBtn, Button lv4AlertBtn, Button lv5AlertBtn, int lv3AlertCount, int lv4AlertCount, int lv5AlertCount)
+        private void SetAlertBackgroundColour(Button lv1AlertBtn, Button lv2AlertBtn, Button lv3AlertBtn, int lv1AlertCount, int lv2AlertCount, int lv3AlertCount)
         {
-            //Level 3 Alert
+            //Level 1 Alert
+            if (lv1AlertCount == 0)
+            {
+                lv1AlertBtn.SetBackgroundColor(Android.Graphics.Color.Green);
+            }
+
+            if (lv1AlertCount < 15 && lv1AlertCount > 0)
+            {
+                lv1AlertBtn.SetBackgroundColor(Android.Graphics.Color.Yellow);
+            }
+
+            if (lv1AlertCount > 15 && lv1AlertCount < 50)
+            {
+                lv1AlertBtn.SetBackgroundColor(Android.Graphics.Color.DarkOrange);
+            }
+
+            if (lv1AlertCount > 50)
+            {
+                lv1AlertBtn.SetBackgroundColor(Android.Graphics.Color.OrangeRed);
+            }
+
+            //Level 2
+            if (lv2AlertCount == 0)
+            {
+                lv2AlertBtn.SetBackgroundColor(Android.Graphics.Color.Green);
+            }
+
+            if (lv2AlertCount < 15 && lv2AlertCount > 0)
+            {
+                lv2AlertBtn.SetBackgroundColor(Android.Graphics.Color.Yellow);
+            }
+
+            if (lv2AlertCount > 15 && lv2AlertCount < 50)
+            {
+                lv2AlertBtn.SetBackgroundColor(Android.Graphics.Color.DarkOrange);
+            }
+
+            if (lv2AlertCount > 50)
+            {
+                lv2AlertBtn.SetBackgroundColor(Android.Graphics.Color.OrangeRed);
+            }
+
+            //Level 3
             if (lv3AlertCount == 0)
             {
                 lv3AlertBtn.SetBackgroundColor(Android.Graphics.Color.Green);
@@ -159,7 +201,7 @@ namespace MobileDashboard.mTabs
 
             if (lv3AlertCount < 15 && lv3AlertCount > 0)
             {
-                lv3AlertBtn.SetBackgroundColor(Android.Graphics.Color.YellowGreen);
+                lv3AlertBtn.SetBackgroundColor(Android.Graphics.Color.Yellow);
             }
 
             if (lv3AlertCount > 15 && lv3AlertCount < 50)
@@ -170,48 +212,6 @@ namespace MobileDashboard.mTabs
             if (lv3AlertCount > 50)
             {
                 lv3AlertBtn.SetBackgroundColor(Android.Graphics.Color.OrangeRed);
-            }
-
-            //Level 4
-            if (lv4AlertCount == 0)
-            {
-                lv4AlertBtn.SetBackgroundColor(Android.Graphics.Color.Green);
-            }
-
-            if (lv4AlertCount < 15 && lv4AlertCount > 0)
-            {
-                lv4AlertBtn.SetBackgroundColor(Android.Graphics.Color.YellowGreen);
-            }
-
-            if (lv4AlertCount > 15 && lv4AlertCount < 50)
-            {
-                lv4AlertBtn.SetBackgroundColor(Android.Graphics.Color.DarkOrange);
-            }
-
-            if (lv4AlertCount > 50)
-            {
-                lv4AlertBtn.SetBackgroundColor(Android.Graphics.Color.OrangeRed);
-            }
-
-            //Level 5
-            if (lv5AlertCount == 0)
-            {
-                lv5AlertBtn.SetBackgroundColor(Android.Graphics.Color.Green);
-            }
-
-            if (lv5AlertCount < 3 && lv5AlertCount > 0)
-            {
-                lv5AlertBtn.SetBackgroundColor(Android.Graphics.Color.YellowGreen);
-            }
-
-            if (lv5AlertCount > 3 && lv5AlertCount < 9)
-            {
-                lv5AlertBtn.SetBackgroundColor(Android.Graphics.Color.DarkOrange);
-            }
-
-            if (lv5AlertCount > 10)
-            {
-                lv5AlertBtn.SetBackgroundColor(Android.Graphics.Color.OrangeRed);
             }
 
         }

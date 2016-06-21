@@ -16,7 +16,7 @@ namespace MobileDashboard
 {
     class McolAlertsFragment : Fragment
     {
-        public static bool Level5Notify = false;
+        public static bool Level3Notify = false;
         public static bool AlreadyNotified = false;
         DataExpiry dt = new DataExpiry();
 
@@ -64,7 +64,7 @@ namespace MobileDashboard
             request.ContentType = "application/json; charset=utf-8";
 
             //Comment out if debugging on android device
-            request.Proxy = new WebProxy("proxy.logica.com", 80);
+            //request.Proxy = new WebProxy("proxy.logica.com", 80);
 
             string json;
             var response = (HttpWebResponse)request.GetResponse();

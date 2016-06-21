@@ -44,7 +44,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <Button
-            android:id="@+id/mcolSummAlertLv3"
+            android:id="@+id/mcolSummAlertLv1"
             android:layout_width="216.0dp"
             android:layout_height="48.0dp"
             android:text="Button"
@@ -52,7 +52,7 @@
             android:background="@android:color/holo_blue_dark"
             android:layout_margin="10dp" />
         <Button
-            android:id="@+id/mcolSummAlertLv4"
+            android:id="@+id/mcolSummAlertLv2"
             android:layout_width="218.0dp"
             android:layout_height="wrap_content"
             android:text="Button"
@@ -60,7 +60,7 @@
             android:layout_gravity="center"
             android:layout_margin="10dp" />
         <Button
-            android:id="@+id/mcolSummAlertLv5"
+            android:id="@+id/mcolSummAlertLv3"
             android:layout_width="218.0dp"
             android:layout_height="wrap_content"
             android:text="Button"

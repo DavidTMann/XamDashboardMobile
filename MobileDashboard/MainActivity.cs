@@ -10,7 +10,8 @@ namespace MobileDashboard
 {
     [Activity(Label = "Dashboard Mobile", MainLauncher = true, Icon = "@drawable/icon")]
     public class MainActivity : Activity
-    {       
+    {
+        public static string userName;
 
         protected override void OnCreate(Bundle bundle)
         {
@@ -49,7 +50,8 @@ namespace MobileDashboard
             {
                 //Go to menu dashboard page                    
                 Intent menu = new Intent(this.ApplicationContext, typeof(MenuActivity));
-                menu.PutExtra("user", user.Text);
+                userName = user.Text.Trim();
+
                 StartActivity(menu);
             }
         }

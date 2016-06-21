@@ -27,22 +27,29 @@ namespace MobileDashboard
             base.OnCreate(savedInstanceState);
 
             // Create your application here
-            SetContentView(Resource.Layout.Menu);            
-
-            //Grab username from MainActivity
-            string userTxt = Intent.GetStringExtra("user") ?? "unknown";
+            SetContentView(Resource.Layout.Menu);
 
             //User field
             TextView userLabel = FindViewById<TextView>(Resource.Id.userLabel);
 
-            if (userTxt == "unknown")
+            if (MainActivity.userName == null)
             {
                 userLabel.Text = "Welcome!";
             }
             else
             {
-                userLabel.Text += userTxt + "!";
+                userLabel.Text += MainActivity.userName + "!";
             }
+
+            //Log out button
+            Button logOutBtn = FindViewById<Button>(Resource.Id.LogOutBtn);
+            logOutBtn.Click += delegate
+            {
+                //Go to log in page                    
+                Intent logIn = new Intent(this.ApplicationContext, typeof(MainActivity));
+
+                StartActivity(logIn);
+            };
 
             //Menu buttons
             Button ragBtn = FindViewById<Button>(Resource.Id.gotoRagBtn);
@@ -62,12 +69,21 @@ namespace MobileDashboard
                 StartActivity(mcolTabbedDash);
             };
 
+            Button contactsBtn = FindViewById<Button>(Resource.Id.ContactsBtn);
+            contactsBtn.Click += delegate
+            {
+                //Go to contacts page                    
+                Intent contacts = new Intent(this.ApplicationContext, typeof(ContactActivity));
+                StartActivity(contacts);
+            };
+
+
             if (!McolAlertsFragment.AlreadyNotified)
             {
                 //Where MCOL ALERTS Notifications are handled
                 GetMcolAlerts();
                 //Sends if alert lvl5
-                SendLevel5Alert(userTxt);
+                SendLevel3Alert();
             }
 
             //Check to see if data has expired
@@ -91,22 +107,21 @@ namespace MobileDashboard
             //Check to see if level 5 alerts in there
             foreach (var al in mcolAlerts)
             {
-                if (al.serverAlerts.priority == "Level 5")
+                if (al.serverAlerts.priority == "Level 3")
                 {
-                    McolAlertsFragment.Level5Notify = true;
+                    McolAlertsFragment.Level3Notify = true;
                 }
             }
         }
 
-        private void SendLevel5Alert(string userTxt)
+        private void SendLevel3Alert()
         {
-            if (McolAlertsFragment.Level5Notify)
+            if (McolAlertsFragment.Level3Notify)
             {
-                const int Level5NotificationId = 1000;
+                const int Level3NotificationId = 1000;
 
                 //Create SMS intent and pass in username
                 Intent smsIntent = new Intent(this, typeof(SMSActivity));
-                smsIntent.PutExtra("user", userTxt);
 
                 /// Construct a back stack for cross-task navigation:
                 TaskStackBuilder stackBuilder = TaskStackBuilder.Create(this);
@@ -118,10 +133,10 @@ namespace MobileDashboard
                     stackBuilder.GetPendingIntent(0, PendingIntentFlags.UpdateCurrent);
 
                 //Big text style notification 
-                string longMessage = "MCOL level 5 alerts are present. Click this notification to notify other team members.";
+                string longMessage = "MCOL level 3 alerts are present. Click this notification to notify other team members.";
 
                 Notification notif = new Notification.Builder(this)
-                .SetContentTitle("Warning: Level 5 Alerts")
+                .SetContentTitle("Warning: Level 3 Alerts")
                 .SetVibrate(new long[] { 1000, 1000, 1000, 1000, 1000 })
                 .SetContentIntent(resultPendingIntent)
                 .SetSmallIcon(Resource.Drawable.Icon)
@@ -132,7 +147,7 @@ namespace MobileDashboard
                 // Finally, publish the notification:
                 NotificationManager notificationManager =
                     (NotificationManager)GetSystemService(Context.NotificationService);
-                notificationManager.Notify(Level5NotificationId, notif);
+                notificationManager.Notify(Level3NotificationId, notif);
 
                 //Once notified we can stop sending alert for this session
                 McolAlertsFragment.AlreadyNotified = true;

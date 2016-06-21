@@ -18,31 +18,42 @@ namespace MobileDashboard
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
-
-            // Create your application here
+            
             //SMS intent to go to messaging app, mimic menu, nasty hack
             SetContentView(Resource.Layout.Menu);
 
+            //Grab username from MainActivity
             string userTxt = Intent.GetStringExtra("user") ?? "unknown";
 
             //User field
             TextView userLabel = FindViewById<TextView>(Resource.Id.userLabel);
 
-            if (userTxt == "unknown")
+            if (MainActivity.userName == null)
             {
                 userLabel.Text = "Welcome!";
             }
             else
             {
-                userLabel.Text += userTxt + "!";
+                userLabel.Text += MainActivity.userName + "!";
             }
 
+            //Log out button
+            Button logOutBtn = FindViewById<Button>(Resource.Id.LogOutBtn);
+            logOutBtn.Click += delegate
+            {
+                //Go to log in page                    
+                Intent logIn = new Intent(this.ApplicationContext, typeof(MainActivity));
+
+                StartActivity(logIn);
+            };
+
+            //Menu buttons
             Button ragBtn = FindViewById<Button>(Resource.Id.gotoRagBtn);
             ragBtn.Click += delegate
             {
-                //Go to rag application page                 
+                //Go to rag application page                    
                 Intent rag = new Intent(this.ApplicationContext, typeof(RAGActivity));
-                
+
                 StartActivity(rag);
             };
 
@@ -54,9 +65,17 @@ namespace MobileDashboard
                 StartActivity(mcolTabbedDash);
             };
 
-            var smsUri = Android.Net.Uri.Parse("smsto:07468415831, 07468708238");
+            Button contactsBtn = FindViewById<Button>(Resource.Id.ContactsBtn);
+            contactsBtn.Click += delegate
+            {
+                //Go to contacts page                    
+                Intent contacts = new Intent(this.ApplicationContext, typeof(ContactActivity));
+                StartActivity(contacts);
+            };
+
+            var smsUri = Android.Net.Uri.Parse("smsto:07468415831, 07468708232, 07876257970");
             var smsIntent = new Intent(Intent.ActionSendto, smsUri);
-            smsIntent.PutExtra("sms_body", "MCOL Level 5 Alert");
+            smsIntent.PutExtra("sms_body", "MCOL Level 3 Alert");
             StartActivity(smsIntent);
 
         }

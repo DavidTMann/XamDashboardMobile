@@ -78,7 +78,7 @@ namespace MobileDashboard
             refresher.Refresh += delegate
             {
                 //Refresh list view
-                RefreshListView(ragObj, ragListView);
+                this.Recreate();
             };
             
             if (!DataExpiry.dataExpired)
@@ -101,18 +101,6 @@ namespace MobileDashboard
                 StartActivity(menu);
             };
 
-        }
-
-        private void RefreshListView(List<RagJson> ragObj, ListView ragListView)
-        {
-            //Check to see if data has expired
-            dt.IsExpired(DataExpiry.expiryDate);
-            //Check to see if DataExpiry.dataExpired is true if so disable data  
-            CheckExpiryRagData(ragObj, ragListView);
-
-            RagJsonAdapter ragAdapter = new RagJsonAdapter(this, ragObj);
-
-            ragListView.Adapter = ragAdapter;
         }
 
         //Only keeps MCOL AND DARTS Apps, adds rest of apps to remaining rag apps
@@ -165,7 +153,7 @@ namespace MobileDashboard
             request.ContentType = "application/json; charset=utf-8";
 
             //Below needs to be commented out if i'm debugging on android device
-            request.Proxy = new WebProxy("proxy.logica.com", 80);
+            //request.Proxy = new WebProxy("proxy.logica.com", 80);
 
             string json;
             var response = (HttpWebResponse)request.GetResponse();
