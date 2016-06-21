@@ -6,7 +6,8 @@
   <uses-permission android:name="android.permission.VIBRATE" />
 	<uses-permission android:name="mobiledashboard.mobiledashboard.permission.C2D_MESSAGE" />
 	<permission android:name="mobiledashboard.mobiledashboard.permission.C2D_MESSAGE" android:protectionLevel="signature" />
-	<application android:label="Dashboard Mobile" android:icon="@drawable/Icon">
+	<application android:label="Dashboard Mobile" android:icon="@drawable/Icon" android:theme="@android:style/Theme.Material.Light">
+    
     <receiver android:name="com.google.android.gms.gcm.GcmReceiver" 
               android:exported="true" 
               android:permission="com.google.android.c2dm.permission.SEND">
