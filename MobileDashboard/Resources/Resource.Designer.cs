@@ -26,6 +26,7 @@ namespace MobileDashboard
 		
 		public static void UpdateIdValues()
 		{
+			global::ModernHttpClient.Resource.String.library_name = global::MobileDashboard.Resource.String.library_name;
 		}
 		
 		public partial class Animation
@@ -2926,11 +2927,11 @@ namespace MobileDashboard
 		public partial class String
 		{
 			
-			// aapt resource value: 0x7f060037
-			public const int ApplicationName = 2131099703;
+			// aapt resource value: 0x7f060038
+			public const int ApplicationName = 2131099704;
 			
-			// aapt resource value: 0x7f060036
-			public const int Hello = 2131099702;
+			// aapt resource value: 0x7f060037
+			public const int Hello = 2131099703;
 			
 			// aapt resource value: 0x7f06001f
 			public const int abc_action_bar_home_description = 2131099679;
@@ -3090,6 +3091,9 @@ namespace MobileDashboard
 			
 			// aapt resource value: 0x7f06001e
 			public const int common_signin_button_text_long = 2131099678;
+			
+			// aapt resource value: 0x7f060036
+			public const int library_name = 2131099702;
 			
 			// aapt resource value: 0x7f060032
 			public const int status_bar_notification_info_overflow = 2131099698;

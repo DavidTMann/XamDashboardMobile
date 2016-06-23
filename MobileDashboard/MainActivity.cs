@@ -5,13 +5,20 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using Android.OS;
+using System.Net;
+using System.Text;
+using System.IO;
+using System.Net.Http;
+using ModernHttpClient;
+using System.Threading.Tasks;
 
 namespace MobileDashboard
 {
-    [Activity(Label = "Dashboard Mobile")]
+    [Activity(Label = "Dashboard Mobile", MainLauncher = true)]
     public class MainActivity : Activity
     {
         public static string userName;
+        public static string jwtToken;
 
         protected override void OnCreate(Bundle bundle)
         {
@@ -35,24 +42,81 @@ namespace MobileDashboard
 
             signInBtn.Click += delegate
             {
-                ValidateUser(user, pwd, incorrectCredTxt);
+                ValidateUserLogin(user, pwd, incorrectCredTxt);
             };
         }
 
-        private void ValidateUser(TextView user, TextView pwd, TextView incorrectCredTxt)
+        public override void OnBackPressed()
         {
-            if (!(user.Text.Trim() == "aylingw" && pwd.Text.Trim() == "password") || user.Text == string.Empty && pwd.Text == string.Empty)
+            //Closes app instead of returning back to menu
+            //base.OnBackPressed();
+            this.FinishAffinity();
+        }
+
+        public void ValidateUserLogin(TextView user, TextView pwd, TextView incorrectCredTxt)
+        {
+            var uri = new Uri("https://www.warren-ayling.me.uk:8443/api/user/login/");
+
+            string json = string.Format("{{\"username\":\"{0}\"," +
+                              "\"passwd\":\"{1}\"}}", user.Text.Trim(), pwd.Text.Trim());
+
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var httpWebRequest = (HttpWebRequest)WebRequest.Create(uri);
+            httpWebRequest.ContentType = "application/json";
+            httpWebRequest.Accept = "application/json";
+            httpWebRequest.Method = "POST";
+
+            using (var streamWriter = new StreamWriter(httpWebRequest.GetRequestStream()))
             {
-                //Show error message
-                incorrectCredTxt.Visibility = ViewStates.Visible;
+                streamWriter.Write(json);
+                streamWriter.Flush();
+                streamWriter.Close();
             }
-            else
+
+            //Get response code
+            var httpResponse = HttpWebResponseExt.GetResponseNoException(httpWebRequest);
+            var result = "";
+
+            using (var streamReader = new StreamReader(httpResponse.GetResponseStream()))
             {
+                result = streamReader.ReadToEnd();
+            }
+
+            //if credentials are ok then go to menu
+            if (httpResponse.StatusCode == HttpStatusCode.OK)
+            {
+                //Store jwtToken
+                jwtToken = result;
+
                 //Go to menu dashboard page                    
                 Intent menu = new Intent(this.ApplicationContext, typeof(MenuActivity));
                 userName = user.Text.Trim();
 
-                StartActivity(menu);
+                StartActivity(menu);                
+            }
+            else
+            {
+                incorrectCredTxt.Visibility = ViewStates.Visible;
+            }
+
+        }
+    }
+
+    public static class HttpWebResponseExt
+    {
+        public static HttpWebResponse GetResponseNoException(this HttpWebRequest req)
+        {
+            try
+            {
+                return (HttpWebResponse)req.GetResponse();
+            }
+            catch (WebException we)
+            {
+                var resp = we.Response as HttpWebResponse;
+                if (resp == null)
+                    throw;
+                return resp;
             }
         }
     }

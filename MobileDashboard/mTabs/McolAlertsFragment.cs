@@ -64,7 +64,7 @@ namespace MobileDashboard
             request.ContentType = "application/json; charset=utf-8";
 
             //Comment out if debugging on android device
-            request.Proxy = new WebProxy("proxy.logica.com", 80);
+            //request.Proxy = new WebProxy("proxy.logica.com", 80);
 
             string json;
             var response = (HttpWebResponse)request.GetResponse();

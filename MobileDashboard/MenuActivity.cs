@@ -76,8 +76,7 @@ namespace MobileDashboard
                 Intent contacts = new Intent(this.ApplicationContext, typeof(ContactActivity));
                 StartActivity(contacts);
             };
-
-
+            
             if (!McolAlertsFragment.AlreadyNotified)
             {
                 //Where MCOL ALERTS Notifications are handled
