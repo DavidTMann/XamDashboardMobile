@@ -32,10 +32,10 @@ namespace MobileDashboard
 
             //username field
             TextView user = FindViewById<TextView>(Resource.Id.userNameTxt);
-            user.SetSingleLine();
+            //user.SetSingleLine();
             //pwd field
             TextView pwd = FindViewById<TextView>(Resource.Id.passwordText);
-            user.SetSingleLine();
+            //user.SetSingleLine();
 
             //incorrect credentials txt box
             var incorrectCredTxt = FindViewById<TextView>(Resource.Id.incorrectPwdText);

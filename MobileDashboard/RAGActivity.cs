@@ -30,12 +30,9 @@ namespace MobileDashboard
 
             // Create your application here
             SetContentView(Resource.Layout.RAG);
-
-            //Grab username from MainActivity
-            string json = GetRagJson();
-
-            //Deserialize json and put it in list view
             
+            //Deserialize json and put it in list view
+            string json = GetRagJson();
             var ragObj = JsonConvert.DeserializeObject<List<RagJson>>(json);
             
             //TOGGLE BUTTON

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+<LinearLayout
+        android:orientation="horizontal"
+        android:minWidth="25px"
+        android:minHeight="25px"
+        android:layout_width="381.0dp"
+        android:layout_height="75.0dp"
+        android:id="@+id/linearLayout1"
+        android:layout_marginTop="40dp"
+        android:gravity="center"
+        android:background="@android:color/background_light">
+        <ImageView
+            android:layout_width="101.0dp"
+            android:layout_height="65.0dp"
+            android:layout_weight="0.5"
+            android:id="@+id/myTeamImg"
+            android:layout_marginLeft="10dp" />
+        <TextView
+            android:text="Name"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:layout_width="197.5dp"
+            android:layout_height="58.0dp"
+            android:layout_weight="0.5"
+            android:id="@+id/myTeamName"
+            android:paddingTop="20dp"
+            android:layout_marginRight="0.0dp"
+            android:textColor="@android:color/darker_gray"
+            android:layout_marginLeft="10dp" />
+        <Button
+            android:background="@drawable/EmailIcon"
+            android:layout_width="46.5dp"
+            android:layout_height="24.5dp"
+            android:id="@+id/myTeamEmail"
+            android:layout_marginRight="10.0dp" />
+        <Button
+            android:background="@drawable/SmsIcon"
+            android:layout_width="46.5dp"
+            android:layout_height="24.5dp"
+            android:id="@+id/myTeamSms"
+            android:layout_marginRight="30dp" />
+    </LinearLayout>
+  </LinearLayout>

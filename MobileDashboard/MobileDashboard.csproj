@@ -16,7 +16,7 @@
     <AndroidResgenFile>Resources\Resource.Designer.cs</AndroidResgenFile>
     <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
     <AndroidUseLatestPlatformSdk>True</AndroidUseLatestPlatformSdk>
-    <TargetFrameworkVersion>v6.0.99</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v6.0</TargetFrameworkVersion>
     <AndroidManifest>Properties\AndroidManifest.xml</AndroidManifest>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
@@ -126,6 +126,7 @@
     <Compile Include="ContactActivity.cs" />
     <Compile Include="JsonAdapters\McolAlertsAdapter.cs" />
     <Compile Include="JsonAdapters\McolStatsAdapter.cs" />
+    <Compile Include="JsonAdapters\MyTeamAdapter.cs" />
     <Compile Include="JsonAdapters\RagJsonAdapter.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="mTabs\McolAlertsFragment.cs" />
@@ -175,6 +176,9 @@
     </AndroidResource>
     <AndroidResource Include="Resources\layout\Contact.axml">
       <SubType>AndroidResource</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\ContactTeamRow.axml">
+      <SubType>Designer</SubType>
     </AndroidResource>
   </ItemGroup>
   <ItemGroup>
