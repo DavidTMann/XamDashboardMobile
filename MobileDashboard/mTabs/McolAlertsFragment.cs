@@ -19,7 +19,7 @@ namespace MobileDashboard
         public static bool Level3Notify = false;
         public static bool AlreadyNotified = false;
         DataExpiry dt = new DataExpiry();
-
+        
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
             View rootView = inflater.Inflate(Resource.Layout.McolAlertsFrag, container, false);
@@ -62,9 +62,12 @@ namespace MobileDashboard
         {
             var request = WebRequest.Create(@"https://www.warren-ayling.me.uk:8443/api/dashboard/mcol/serveralerts");
             request.ContentType = "application/json; charset=utf-8";
+            request.Headers.Set("x-auth", MainActivity.jwtToken);
 
-            //Comment out if debugging on android device
-            //request.Proxy = new WebProxy("proxy.logica.com", 80);
+            if (MainActivity._localProxy != null)
+            { 
+                request.Proxy = new WebProxy("proxy.logica.com", 80);
+            }
 
             string json;
             var response = (HttpWebResponse)request.GetResponse();
@@ -73,14 +76,17 @@ namespace MobileDashboard
             {
                 json = sr.ReadToEnd();
 
+                //Praise the lord for this line below
+                json = JToken.Parse(json).ToString();
+
                 //Remove \ and quotes wrapped round json
-                json = json.Replace(@"\", string.Empty);
-                json = json.Substring(1, json.Length - 2);
-                                
-                //Nasty hack due to escape characters in json..
-                json = json.Replace("\".\"", string.Empty);
-                json = json.Replace("oc4j/mcol-web-services/WEBs/processRequest.avg", string.Empty);
-                json = json.Replace("/", string.Empty);
+                //json = json.Replace(@"\", string.Empty);
+                //json = json.Substring(1, json.Length - 2);
+
+                ////Nasty hack due to escape characters in json..
+                //json = json.Replace("\".\"", string.Empty);
+                //json = json.Replace("oc4j/mcol-web-services/WEBs/processRequest.avg", string.Empty);
+                //json = json.Replace("/", string.Empty);
                 // / oc4j / mcol - web - services / WEBs / processRequest.avg "." workaround
 
                 return json;

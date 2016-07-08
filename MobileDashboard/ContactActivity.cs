@@ -55,7 +55,10 @@ namespace MobileDashboard
             request.Headers.Add(string.Format("x-auth: {0}", MainActivity.jwtToken));
 
             //Below needs to be commented out if i'm debugging on android device
-            //request.Proxy = new WebProxy("proxy.logica.com", 80);
+            if (MainActivity._localProxy != null)
+            {
+                request.Proxy = new WebProxy("proxy.logica.com", 80);
+            }
 
             string json;
             var response = (HttpWebResponse)request.GetResponse();

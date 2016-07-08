@@ -13,6 +13,7 @@ using BarChart;
 using Android.Support.V4.Widget;
 using System.Net;
 using System.IO;
+using Newtonsoft.Json.Linq;
 
 namespace MobileDashboard
 {   
@@ -140,7 +141,7 @@ namespace MobileDashboard
                 ragObj = null;
                 ragListView.Visibility = ViewStates.Gone;
 
-                ShowAlert("Sorry, the data has expired.", false);
+                ShowAlert("Sorry, the data has expired. Please log back in.", false);
             }
         }
 
@@ -150,7 +151,10 @@ namespace MobileDashboard
             request.ContentType = "application/json; charset=utf-8";
 
             //Below needs to be commented out if i'm debugging on android device
-            //request.Proxy = new WebProxy("proxy.logica.com", 80);
+            if (MainActivity._localProxy != null)
+            {
+                request.Proxy = new WebProxy("proxy.logica.com", 80);
+            }
 
             string json;
             var response = (HttpWebResponse)request.GetResponse();
@@ -159,9 +163,12 @@ namespace MobileDashboard
             {
                 json = sr.ReadToEnd();
 
+                //Praise the lord for this line below
+                json = JToken.Parse(json).ToString();
+
                 //Remove \ and quotes wrapped round json
-                json = json.Replace(@"\", string.Empty);
-                json = json.Substring(1, json.Length - 2);
+                //json = json.Replace(@"\", string.Empty);
+                //json = json.Substring(1, json.Length - 2);
 
                 return json;
             }
@@ -194,7 +201,9 @@ namespace MobileDashboard
                 AlertDialog.Builder alert = new AlertDialog.Builder(this);
                 alert.SetTitle(str);
                 alert.SetPositiveButton("OK", (senderAlert, args) => {
-                    // write your own set of instructions
+                    //Go back to log in page
+                    Intent logInPage = new Intent(this.ApplicationContext, typeof(MainActivity));
+                    StartActivity(logInPage);
                 });
                 //run the alert in UI thread to display in the screen
                 RunOnUiThread(() => {

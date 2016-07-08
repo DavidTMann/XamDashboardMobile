@@ -11,6 +11,7 @@ using System.IO;
 using System.Net.Http;
 using ModernHttpClient;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace MobileDashboard
 {
@@ -19,6 +20,9 @@ namespace MobileDashboard
     {
         public static string userName;
         public static string jwtToken;
+        private static string secretKey = "postsecret";
+
+        public static WebProxy _localProxy = null;
 
         protected override void OnCreate(Bundle bundle)
         {
@@ -55,14 +59,22 @@ namespace MobileDashboard
 
         public void ValidateUserLogin(TextView user, TextView pwd, TextView incorrectCredTxt)
         {
-            var uri = new Uri("https://www.warren-ayling.me.uk:8443/api/user/login/");
+            var uri = new Uri("https://www.warren-ayling.me.uk:8443/api/user/login");
 
             string json = string.Format("{{\"username\":\"{0}\"," +
                               "\"passwd\":\"{1}\"}}", user.Text.Trim(), pwd.Text.Trim());
 
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
+            //Comment out if NOT using groupinfra network
+            //_localProxy = new WebProxy("proxy.logica.com", 80);
 
             var httpWebRequest = (HttpWebRequest)WebRequest.Create(uri);
+
+            //Below needs to be commented out if i'm debugging on android device
+            if (MainActivity._localProxy != null)
+            {
+                httpWebRequest.Proxy = new WebProxy("proxy.logica.com", 80);
+            }
+
             httpWebRequest.ContentType = "application/json";
             httpWebRequest.Accept = "application/json";
             httpWebRequest.Method = "POST";
@@ -89,6 +101,13 @@ namespace MobileDashboard
                 //Store jwtToken
                 jwtToken = result;
 
+                //Secret key as bytes
+                byte[] secKeyBytes = Encoding.UTF8.GetBytes(secretKey);
+                
+                //Decode jwtToken and grab expiry date
+                //var payload = JWT.JsonWebToken.Decode(jwtToken, secKeyBytes);
+                //long expiry = payload["expires"];
+
                 //Go to menu dashboard page                    
                 Intent menu = new Intent(this.ApplicationContext, typeof(MenuActivity));
                 userName = user.Text.Trim();
@@ -99,7 +118,6 @@ namespace MobileDashboard
             {
                 incorrectCredTxt.Visibility = ViewStates.Visible;
             }
-
         }
     }
 

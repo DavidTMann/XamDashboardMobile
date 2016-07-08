@@ -17,7 +17,7 @@ namespace MobileDashboard.SharedClass
         //1 hr behind
         public static DateTime currentTime = DateTime.UtcNow.AddHours(1);
         public static bool dataExpired = false;
-        public static DateTime expiryDate;
+        public static DateTime expiryDate; //In milliseconds since 1970/01/01
 
         //If expiry date is dataExpired = true
         public void IsExpired(DateTime expiryDate)

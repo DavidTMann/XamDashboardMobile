@@ -12,6 +12,7 @@ using Newtonsoft.Json;
 using MobileDashboard.JsonAdapters;
 using MobileDashboard.SharedClass;
 using System.Timers;
+using Newtonsoft.Json.Linq;
 
 namespace MobileDashboard
 {
@@ -62,9 +63,13 @@ namespace MobileDashboard
         {
             var request = WebRequest.Create(@"https://www.warren-ayling.me.uk:8443/api/dashboard/mcol/stats");
             request.ContentType = "application/json; charset=utf-8";
+            request.Headers.Set("x-auth", MainActivity.jwtToken);
 
             //Comment out if debugging on android device
-            //request.Proxy = new WebProxy("proxy.logica.com", 80);
+            if (MainActivity._localProxy != null)
+            {
+                request.Proxy = new WebProxy("proxy.logica.com", 80);
+            }
 
             string json;
             var response = (HttpWebResponse)request.GetResponse();
@@ -73,9 +78,12 @@ namespace MobileDashboard
             {
                 json = sr.ReadToEnd();
 
-                //Remove \ and quotes wrapped round json
-                json = json.Replace(@"\", string.Empty);
-                json = json.Substring(1, json.Length - 2);
+                //Praise the lord for this line below
+                json = JToken.Parse(json).ToString();
+
+                ////Remove \ and quotes wrapped round json
+                //json = json.Replace(@"\", string.Empty);
+                //json = json.Substring(1, json.Length - 2);
 
                 return json;
             }

@@ -58,7 +58,7 @@ namespace MobileDashboard
             //If expired
             if (DataExpiry.dataExpired)
             {
-                ShowAlert("Sorry, the data has expired.", false);
+                ShowAlert("Sorry, the data has expired. Please log back in.", false);
 
                 //Notification to say data has expired
                 // Construct a back stack for cross-task navigation:
@@ -106,7 +106,9 @@ namespace MobileDashboard
                 AlertDialog.Builder alert = new AlertDialog.Builder(this);
                 alert.SetTitle(str);
                 alert.SetPositiveButton("OK", (senderAlert, args) => {
-                    // write your own set of instructions
+                    //Go back to log in page
+                    Intent logInPage = new Intent(this.ApplicationContext, typeof(MainActivity));
+                    StartActivity(logInPage);
                 });
                 //run the alert in UI thread to display in the screen
                 RunOnUiThread(() => {
