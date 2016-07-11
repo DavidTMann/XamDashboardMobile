@@ -13,14 +13,12 @@ using System.Net;
 using System.IO;
 using Newtonsoft.Json;
 using MobileDashboard.JsonAdapters;
-using MobileDashboard.SharedClass;
 
 namespace MobileDashboard
 {
     [Activity(Label = "Menu")]
     public class MenuActivity : Activity
     {
-        DataExpiry dt = new DataExpiry();
 
         protected override void OnCreate(Bundle savedInstanceState)
         {          
@@ -84,10 +82,6 @@ namespace MobileDashboard
                 //Sends if alert lvl5
                 SendLevel3Alert();
             }
-
-            //Check to see if data has expired
-            dt.IsExpired(DataExpiry.expiryDate);
-            //Check to see if DataExpiry.dataExpired is true if so disable data
         }
 
         private void GetMcolAlerts()

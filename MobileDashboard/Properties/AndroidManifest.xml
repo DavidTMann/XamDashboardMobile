@@ -4,7 +4,7 @@
 	<uses-permission android:name="android.permission.WAKE_LOCK" />
 	<uses-permission android:name="android.permission.INTERNET" />
   <uses-permission android:name="android.permission.VIBRATE" />
-	<application android:label="Dashboard Mobile" android:icon="@drawable/Icon" android:theme="@android:style/Theme.Material.Light">
+	<application android:label="Dashboard Mobile" android:icon="@drawable/Icon" android:theme="@style/Theme.AppCompat.Light">
     
     
 </application>

@@ -18,14 +18,13 @@ using System.IO;
 using Newtonsoft.Json;
 using Android.Preferences;
 using Android.Graphics;
-using MobileDashboard.SharedClass;
 
 namespace MobileDashboard
 {
     [Activity(Label = "MCOL Dashboard")]
     public class MCOLTabbedDash : FragmentActivity
     {
-        private static bool isFirstRun = true;
+        public static bool dataExpired = false;
 
         protected override void OnCreate(Bundle savedInstanceState)
         {
@@ -33,14 +32,7 @@ namespace MobileDashboard
 
             //// Create your application here
             SetContentView(Resource.Layout.MCOLTabbedDash);
-
-            if (isFirstRun)
-            {
-                //Figure out how to run it only once            
-                ShowAlert("Swipe right to view other MCOL data.", false);
-                isFirstRun = false;
-            }
-
+            
             var adapter =
             new TabsPageAdapter(SupportFragmentManager, new McolSummaryFragment(), new McolStatsFragment(), new McolAlertsFragment());
 
@@ -49,16 +41,27 @@ namespace MobileDashboard
             
             //Checks if data is expired
             CheckIfDataIsExpired();
-            
         }        
 
-        private void CheckIfDataIsExpired()
+        public void CheckIfDataIsExpired()
         {
             int DataExpiredNotificationId = 1001;
+
+            //Quick API call to test if data has expired, if 401 then expired
+            McolStatsFragment stats = new McolStatsFragment();
+            stats.GetMcolStatsJson();
+
             //If expired
-            if (DataExpiry.dataExpired)
+            if (dataExpired)
             {
-                ShowAlert("Sorry, the data has expired. Please log back in.", false);
+                //Alert dialog below
+                //ShowAlert("Sorry, the data has expired. Please log back in.", false);
+
+                //Introduce new DialogFragment
+                Android.App.FragmentTransaction transaction = FragmentManager.BeginTransaction();
+                dialog_LogIn loginPrompt = new dialog_LogIn();
+                loginPrompt.Cancelable = false;
+                loginPrompt.Show(transaction, "dialog fragment");
 
                 //Notification to say data has expired
                 // Construct a back stack for cross-task navigation:
@@ -70,7 +73,7 @@ namespace MobileDashboard
                     .SetContentTitle("Data has expired.")      // Set its title
                     .SetVibrate(new long[] { 1000, 1000, 1000, 1000, 1000 })
                     .SetSmallIcon(Resource.Drawable.Icon)  //  this icon
-                    .SetContentText("Data has expired and cannot be seen."); // The message to display.                  
+                    .SetContentText("Data has expired, please log back in."); // The message to display.                  
 
                 // Finally, publish the notification:
                 NotificationManager notificationManager =

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:gravity="center_vertical">
+    <TextView
+        android:text="Data has expired, please log back in."
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView1"
+        android:gravity="center_horizontal"
+        android:paddingTop="20dp"
+        android:paddingBottom="40dp" />
+    <EditText
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/userNameTxtPrompt"
+        android:singleLine="true"
+        android:textAlignment="center"
+        android:layout_marginRight="0.0dp"
+        android:includeFontPadding="false"
+        android:gravity="center_horizontal"
+        android:layout_gravity="center_horizontal" />
+    <EditText
+        android:inputType="textPassword"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/passwordTextPrompt"
+        android:singleLine="true"
+        android:textAlignment="center"
+        android:includeFontPadding="false"
+        android:gravity="center_horizontal"
+        android:layout_gravity="center_horizontal" />
+    <Button
+        android:text="Sign In"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/SignInBtnPrompt"
+        android:layout_gravity="center_horizontal" />
+    <TextView
+        android:text="Invalid username or password"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_width="match_parent"
+        android:layout_height="279.5dp"
+        android:id="@+id/incorrectPwdTextPrompt"
+        android:textColor="@android:color/holo_red_light"
+        android:paddingBottom="200dp"
+        android:layout_gravity="center"
+        android:textAlignment="center"
+        android:gravity="center"
+        android:visibility="invisible" />
+</LinearLayout>

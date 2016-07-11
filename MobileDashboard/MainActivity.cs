@@ -46,7 +46,7 @@ namespace MobileDashboard
 
             signInBtn.Click += delegate
             {
-                ValidateUserLogin(user, pwd, incorrectCredTxt);
+                ValidateUserLogin(user, pwd, incorrectCredTxt, false);
             };
         }
 
@@ -57,7 +57,7 @@ namespace MobileDashboard
             this.FinishAffinity();
         }
 
-        public void ValidateUserLogin(TextView user, TextView pwd, TextView incorrectCredTxt)
+        public bool ValidateUserLogin(TextView user, TextView pwd, TextView incorrectCredTxt, bool prompt)
         {
             var uri = new Uri("https://www.warren-ayling.me.uk:8443/api/user/login");
 
@@ -101,22 +101,28 @@ namespace MobileDashboard
                 //Store jwtToken
                 jwtToken = result;
 
+                //Reset data expiry
+                MCOLTabbedDash.dataExpired = false;
+
                 //Secret key as bytes
                 byte[] secKeyBytes = Encoding.UTF8.GetBytes(secretKey);
-                
-                //Decode jwtToken and grab expiry date
-                //var payload = JWT.JsonWebToken.Decode(jwtToken, secKeyBytes);
-                //long expiry = payload["expires"];
 
-                //Go to menu dashboard page                    
-                Intent menu = new Intent(this.ApplicationContext, typeof(MenuActivity));
-                userName = user.Text.Trim();
+                if (!prompt)
+                {
+                    //Go to menu dashboard page                    
+                    Intent menu = new Intent(this.ApplicationContext, typeof(MenuActivity));
+                    userName = user.Text.Trim();
 
-                StartActivity(menu);                
+                    StartActivity(menu);
+                }
+
+                return true;                
             }
             else
             {
                 incorrectCredTxt.Visibility = ViewStates.Visible;
+
+                return false;
             }
         }
     }

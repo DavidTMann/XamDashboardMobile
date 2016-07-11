@@ -50,7 +50,7 @@ namespace MobileDashboard
 
         public string GetMyTeamJson()
         {
-            var request = WebRequest.Create(@"https://www.warren-ayling.me.uk:8443/api/user/myteam");
+            var request = (HttpWebRequest)WebRequest.Create(@"https://www.warren-ayling.me.uk:8443/api/user/myteam");
             request.ContentType = "application/json";
             request.Headers.Add(string.Format("x-auth: {0}", MainActivity.jwtToken));
 
@@ -60,8 +60,12 @@ namespace MobileDashboard
                 request.Proxy = new WebProxy("proxy.logica.com", 80);
             }
 
-            string json;
-            var response = (HttpWebResponse)request.GetResponse();
+            string json = "";
+
+            //Get response code
+            var response = HttpWebResponseExt.GetResponseNoException(request);
+
+            //Check response if OK read json and return, if 401 then set data expired to true
 
             using (var sr = new StreamReader(response.GetResponseStream()))
             {

@@ -132,6 +132,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ContactActivity.cs" />
+    <Compile Include="dialog_LogIn.cs" />
     <Compile Include="JsonAdapters\McolAlertsAdapter.cs" />
     <Compile Include="JsonAdapters\McolStatsAdapter.cs" />
     <Compile Include="JsonAdapters\MyTeamAdapter.cs" />
@@ -147,7 +148,6 @@
     <Compile Include="RAGActivity.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SharedClass\DataExpiry.cs" />
     <Compile Include="SMSActivity.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -188,6 +188,7 @@
     <AndroidResource Include="Resources\layout\ContactTeamRow.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
+    <AndroidResource Include="Resources\layout\LogInPrompt.axml" />
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\layout\Main.axml" />

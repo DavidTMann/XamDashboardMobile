@@ -11,8 +11,8 @@ using Android.Widget;
 using Android.Support.V4.App;
 using Newtonsoft.Json;
 using MobileDashboard.JsonAdapters;
-using MobileDashboard.SharedClass;
 using Android.Support.V4.Widget;
+using Android.Support.V7.App;
 
 namespace MobileDashboard.mTabs
 {
@@ -20,12 +20,11 @@ namespace MobileDashboard.mTabs
     {
         RAGActivity rag = new RAGActivity();
         McolAlertsFragment a = new McolAlertsFragment();
-        DataExpiry dt = new DataExpiry();
         
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
             View rootView = inflater.Inflate(Resource.Layout.McolSummFrag, container, false);
-
+            
             //Get rag json from 
             string ragJson = rag.GetRagJson();
 
@@ -55,7 +54,6 @@ namespace MobileDashboard.mTabs
             //Deserialize into alert c# obj
             var mcolAlerts = JsonConvert.DeserializeObject<List<McolAlerts>>(alertJson);
                         
-
             //MCOL Alerts for summary buttons
             Button summAlertsLv1Btn = rootView.FindViewById<Button>(Resource.Id.mcolSummAlertLv1);
             Button summAlertsLv2Btn = rootView.FindViewById<Button>(Resource.Id.mcolSummAlertLv2);
@@ -65,36 +63,38 @@ namespace MobileDashboard.mTabs
             int lv1AlertCount = 0;
             int lv2AlertCount = 0;
             int lv3AlertCount = 0;
-
-            foreach (var al in mcolAlerts)
+                        
+            if (mcolAlerts != null)
             {
-                if (al.serverAlerts.priority == "Level 1")
+                foreach (var al in mcolAlerts)
                 {
-                    lv1AlertCount++;
+                    if (al.serverAlerts.priority == "Level 1")
+                    {
+                        lv1AlertCount++;
+                    }
+
+                    if (al.serverAlerts.priority == "Level 2")
+                    {
+                        lv2AlertCount++;
+                    }
+
+                    if (al.serverAlerts.priority == "Level 3")
+                    {
+                        lv3AlertCount++;
+                    }
                 }
 
-                if (al.serverAlerts.priority == "Level 2")
-                {
-                    lv2AlertCount++;
-                }
+                //Assign alert count to buttons
+                summAlertsLv1Btn.Text = string.Format("Level 1 Alerts : {0}", lv1AlertCount.ToString());
+                summAlertsLv2Btn.Text = string.Format("Level 2 Alerts : {0}", lv2AlertCount.ToString());
+                summAlertsLv3Btn.Text = string.Format("Level 3 Alerts : {0}", lv3AlertCount.ToString());
 
-                if (al.serverAlerts.priority == "Level 3")
-                {
-                    lv3AlertCount++;
-                }
+                //Set alert background btn colour
+                SetAlertBackgroundColour(summAlertsLv1Btn, summAlertsLv2Btn, summAlertsLv3Btn, lv1AlertCount, lv2AlertCount, lv3AlertCount);
+                                
             }
 
-            //Assign alert count to buttons
-            summAlertsLv1Btn.Text = string.Format("Level 1 Alerts : {0}", lv1AlertCount.ToString());
-            summAlertsLv2Btn.Text = string.Format("Level 2 Alerts : {0}", lv2AlertCount.ToString());
-            summAlertsLv3Btn.Text = string.Format("Level 3 Alerts : {0}", lv3AlertCount.ToString());
-
-            //Set alert background btn colour
-            SetAlertBackgroundColour(summAlertsLv1Btn, summAlertsLv2Btn, summAlertsLv3Btn, lv1AlertCount, lv2AlertCount, lv3AlertCount);
-
-            //DATA EXPIRY
-            //Check to see if data has expired
-            dt.IsExpired(DataExpiry.expiryDate);
+            //DATA EXPIRY                      
             //Check to see if DataExpiry.dataExpired is true if so disable data  
             ExpireSummaryData(ragObj, mcolAlerts, ragScoreBtn, summAlertsLv1Btn, summAlertsLv2Btn, summAlertsLv3Btn);
 
@@ -112,8 +112,9 @@ namespace MobileDashboard.mTabs
         //Expires summary data if data has expired
         private void ExpireSummaryData(List<RagJson> ragObj, List<McolAlerts> mcolObj, Button ragScoreBtn, Button lvl3AlertBtn, Button lvl4AlertBtn, Button lvl5AlertBtn)
         {
-            if (DataExpiry.dataExpired)
+            if (MCOLTabbedDash.dataExpired)
             {
+
                 ragObj = null;
                 mcolObj = null;
                 ragScoreBtn.Text = "Data Expired";

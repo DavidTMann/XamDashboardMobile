@@ -8,7 +8,6 @@ using Android.Widget;
 using Newtonsoft.Json;
 using System;
 using MobileDashboard.JsonAdapters;
-using MobileDashboard.SharedClass;
 using BarChart;
 using Android.Support.V4.Widget;
 using System.Net;
@@ -21,7 +20,6 @@ namespace MobileDashboard
     [Activity(Label = "RAG Stats")]
     public class RAGActivity : Activity
     {
-        DataExpiry dt = new DataExpiry();
         List<RagJson> remaindingRagApps = new List<RagJson>();
         private bool addedRagApps = false;
 
@@ -34,6 +32,7 @@ namespace MobileDashboard
             
             //Deserialize json and put it in list view
             string json = GetRagJson();
+
             var ragObj = JsonConvert.DeserializeObject<List<RagJson>>(json);
             
             //TOGGLE BUTTON
@@ -51,10 +50,8 @@ namespace MobileDashboard
                 if (ragTogglBtn.Checked)
                 {                                           
                     ragObj.AddRange(remaindingRagApps);
-                    addedRagApps = true;                   
-
-                    //Check to see if data has expired
-                    dt.IsExpired(DataExpiry.expiryDate);
+                    addedRagApps = true;
+                    
                     //Check to see if DataExpiry.dataExpired is true if so disable data  
                     CheckExpiryRagData(ragObj, ragListView);
 
@@ -79,7 +76,7 @@ namespace MobileDashboard
                 this.Recreate();
             };
             
-            if (!DataExpiry.dataExpired)
+            if (!MCOLTabbedDash.dataExpired)
             {
                 //ListView item clicking
                 ragListView.ItemClick += (object sender, Android.Widget.AdapterView.ItemClickEventArgs e) =>
@@ -123,8 +120,6 @@ namespace MobileDashboard
                 }
             }            
 
-            //Check to see if data has expired
-            dt.IsExpired(DataExpiry.expiryDate);
             //Check to see if DataExpiry.dataExpired is true if so disable data  
             CheckExpiryRagData(ragObj, ragListView);
 
@@ -136,12 +131,18 @@ namespace MobileDashboard
         //Run this method, if expired makes data null
         private void CheckExpiryRagData(List<RagJson> ragObj, ListView ragListView)
         {
-            if (DataExpiry.dataExpired)
+            if (MCOLTabbedDash.dataExpired)
             {
                 ragObj = null;
                 ragListView.Visibility = ViewStates.Gone;
 
-                ShowAlert("Sorry, the data has expired. Please log back in.", false);
+                //ShowAlert("Sorry, the data has expired. Please log back in.", false);
+
+                //Introduce new DialogFragment
+                Android.App.FragmentTransaction transaction = FragmentManager.BeginTransaction();
+                dialog_LogIn loginPrompt = new dialog_LogIn();
+                loginPrompt.Cancelable = false;
+                loginPrompt.Show(transaction, "dialog fragment");
             }
         }
 

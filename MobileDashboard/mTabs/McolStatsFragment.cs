@@ -10,7 +10,6 @@ using System.IO;
 using System.Net;
 using Newtonsoft.Json;
 using MobileDashboard.JsonAdapters;
-using MobileDashboard.SharedClass;
 using System.Timers;
 using Newtonsoft.Json.Linq;
 
@@ -18,7 +17,6 @@ namespace MobileDashboard
 {
     class McolStatsFragment : Android.Support.V4.App.Fragment
     {
-        DataExpiry dt = new DataExpiry();
 
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
@@ -38,9 +36,7 @@ namespace MobileDashboard
             var mcolStats = JsonConvert.DeserializeObject<List<McolStats>>(json);
                         
             ListView mcolListView = rootView.FindViewById<ListView>(Resource.Id.mcolListView);
-            
-            //Check to see if data has expired
-            dt.IsExpired(DataExpiry.expiryDate);
+                        
             //Check to see if DataExpiry.dataExpired is true if so disable data  
             ExpireStatsData(mcolStats, mcolListView);
 
@@ -52,16 +48,16 @@ namespace MobileDashboard
         //Run this method, if expired makes data null
         private void ExpireStatsData(List<McolStats> mcolObj, ListView mcolListView)
         {
-            if (DataExpiry.dataExpired)
+            if (MCOLTabbedDash.dataExpired)
             {
                 mcolObj = null;
                 mcolListView.Visibility = ViewStates.Gone;                
             }
         }
 
-        private string GetMcolStatsJson()
+        public string GetMcolStatsJson()
         {
-            var request = WebRequest.Create(@"https://www.warren-ayling.me.uk:8443/api/dashboard/mcol/stats");
+            var request = (HttpWebRequest)WebRequest.Create(@"https://www.warren-ayling.me.uk:8443/api/dashboard/mcol/stats");
             request.ContentType = "application/json; charset=utf-8";
             request.Headers.Set("x-auth", MainActivity.jwtToken);
 
@@ -71,22 +67,33 @@ namespace MobileDashboard
                 request.Proxy = new WebProxy("proxy.logica.com", 80);
             }
 
-            string json;
-            var response = (HttpWebResponse)request.GetResponse();
+            string json = "";
 
-            using (var sr = new StreamReader(response.GetResponseStream()))
+            //Get response code without exception
+            var response = HttpWebResponseExt.GetResponseNoException(request);
+
+            if (response.StatusCode == HttpStatusCode.OK)
             {
-                json = sr.ReadToEnd();
+                using (var sr = new StreamReader(response.GetResponseStream()))
+                {
+                    json = sr.ReadToEnd();
 
-                //Praise the lord for this line below
-                json = JToken.Parse(json).ToString();
+                    //Praise the lord for this line below
+                    json = JToken.Parse(json).ToString();
 
-                ////Remove \ and quotes wrapped round json
-                //json = json.Replace(@"\", string.Empty);
-                //json = json.Substring(1, json.Length - 2);
+                    ////Remove \ and quotes wrapped round json
+                    //json = json.Replace(@"\", string.Empty);
+                    //json = json.Substring(1, json.Length - 2);
 
-                return json;
+                    return json;
+                }
             }
+            else if (response.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                MCOLTabbedDash.dataExpired = true;
+            }
+
+            return json;
         }        
     }
 }
