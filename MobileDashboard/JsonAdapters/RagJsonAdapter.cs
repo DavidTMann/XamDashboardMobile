@@ -59,7 +59,7 @@ namespace MobileDashboard.JsonAdapters
             rating.SetTextColor(Color.Black);
             buName.SetTextColor(Color.Black);
 
-            if (Convert.ToInt32(rating.Text) <= 20)
+            if (item.RAGColour == "black")
             {
                 appName.SetBackgroundColor(Color.Black);
                 rating.SetBackgroundColor(Color.Black);
@@ -69,19 +69,22 @@ namespace MobileDashboard.JsonAdapters
                 rating.SetTextColor(Color.White);
                 buName.SetTextColor(Color.White);
             }
-            if (Convert.ToInt32(rating.Text) <= 40 && Convert.ToInt32(rating.Text) > 20)
+
+            if (item.RAGColour == "red")
             {
                 appName.SetBackgroundColor(Color.Red);
                 rating.SetBackgroundColor(Color.Red);
                 buName.SetBackgroundColor(Color.Red);
             }
-            if (Convert.ToInt32(rating.Text) <= 85 && Convert.ToInt32(rating.Text) > 40)
+
+            if (item.RAGColour == "amber")
             {
-                appName.SetBackgroundColor(Color.Yellow);
-                rating.SetBackgroundColor(Color.Yellow);
-                buName.SetBackgroundColor(Color.Yellow);
+                appName.SetBackgroundColor(Color.Orange);
+                rating.SetBackgroundColor(Color.Orange);
+                buName.SetBackgroundColor(Color.Orange);
             }
-            if (Convert.ToInt32(rating.Text) == 100)
+
+            if (item.RAGColour == "green")
             {
                 appName.SetBackgroundColor(Color.Green);
                 rating.SetBackgroundColor(Color.Green);

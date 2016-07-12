@@ -65,7 +65,7 @@ namespace MobileDashboard
                               "\"passwd\":\"{1}\"}}", user.Text.Trim(), pwd.Text.Trim());
 
             //Comment out if NOT using groupinfra network
-            //_localProxy = new WebProxy("proxy.logica.com", 80);
+            _localProxy = new WebProxy("proxy.logica.com", 80);
 
             var httpWebRequest = (HttpWebRequest)WebRequest.Create(uri);
 
