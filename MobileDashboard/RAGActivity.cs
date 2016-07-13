@@ -42,8 +42,37 @@ namespace MobileDashboard
             //List view 
             var ragListView = FindViewById<ListView>(Resource.Id.listView);
 
+            //Get MyTeam json to show by default accounts owned app's e.g. DAVE is MCOL, DARTS.
+            ContactActivity con = new ContactActivity();
+            string myTeamJson = con.GetMyTeamJson();
+
+            //Deserialize json into c# object MyTeam
+            var myTeamObj = JsonConvert.DeserializeObject<List<MyTeam>>(myTeamJson);
+
+            //Get the allocated apps from team member
+            List<string> defaultApps = new List<string>();
+
+            //Hardcoded hack to get defaultApps
+            foreach (var obj in myTeamObj)
+            {
+                if (MainActivity.userName == "aylingw" && obj.Name == "Warren Ayling")
+                {
+                    defaultApps = obj.Teams;
+                }
+
+                if (MainActivity.userName == "mannd" && obj.Name == "Dave Mann")
+                {
+                    defaultApps = obj.Teams;
+                }
+
+                if (MainActivity.userName == "malikq" && obj.Name == "Qas Malik")
+                {
+                    defaultApps = obj.Teams;
+                }
+            }
+
             //By default only show mcol and darts
-            RagOnlyShowMcolAndDarts(ragObj, ragListView);
+            RagOnlyShowDefaultApps(ragObj, ragListView, defaultApps);
 
             ragTogglBtn.Click += (o, e) => {
                 // Perform action on clicks
@@ -61,7 +90,7 @@ namespace MobileDashboard
                 }
                 else if (!ragTogglBtn.Checked)
                 {
-                    RagOnlyShowMcolAndDarts(ragObj, ragListView);
+                    RagOnlyShowDefaultApps(ragObj, ragListView, defaultApps);
                 }
             };
 
@@ -98,18 +127,22 @@ namespace MobileDashboard
 
         }
 
-        //Only keeps MCOL AND DARTS Apps, adds rest of apps to remaining rag apps
-        private void RagOnlyShowMcolAndDarts(List<RagJson> ragObj, ListView ragListView)
+        //Only keeps logged in acc's default Apps, adds rest of apps to remaining rag apps
+        private void RagOnlyShowDefaultApps(List<RagJson> ragObj, ListView ragListView, List<string> defaultApps)
         {
+
+            string defaultApp1 = defaultApps[0];
+            string defaultApp2 = defaultApps[1];
+
             //remove all apps apart from mcol and darts
             foreach (var r in ragObj.ToArray())
             {
-                if (r.Name == "MCOL" || r.Name == "DARTS")
+                if (r.Name == defaultApp1 || r.Name == defaultApp2)
                 {
                     continue;
                 }
 
-                if (!r.Name.Contains("MCOL") || (!r.Name.Contains("DARTS")))
+                if (!r.Name.Contains(defaultApp1) || (!r.Name.Contains(defaultApp2)))
                 {
                     ragObj.Remove(r);
                     

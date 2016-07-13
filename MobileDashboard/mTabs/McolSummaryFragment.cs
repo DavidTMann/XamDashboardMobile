@@ -46,6 +46,7 @@ namespace MobileDashboard.mTabs
             ragScoreBtn.SetTextColor(Android.Content.Res.ColorStateList.ValueOf(Android.Graphics.Color.Black));
 
             //Set rag button colour
+
             SetRagButtonColour(ragScoreBtn, ragObj);
             
             //Get server alert json for MCOL
@@ -127,26 +128,26 @@ namespace MobileDashboard.mTabs
         //Decides what colour to set RAG button
         private void SetRagButtonColour(Button ragScoreBtn, List<RagJson> ragObj)
         {
-            if (ragObj[0].RAGStatus <= 20)
-            {
-                ragScoreBtn.SetBackgroundColor(Android.Graphics.Color.Black);
-            }
-
-            if (ragObj[0].RAGStatus <= 40 && ragObj[0].RAGStatus > 20)
+            if (ragObj[0].RAGColour == "red")
             {
                 ragScoreBtn.SetBackgroundColor(Android.Graphics.Color.Red);
             }
 
-            if (ragObj[0].RAGStatus <= 85 && ragObj[0].RAGStatus > 40)
+            if (ragObj[0].RAGColour == "amber")
             {
-                ragScoreBtn.SetBackgroundColor(Android.Graphics.Color.Yellow);
+                ragScoreBtn.SetBackgroundColor(Android.Graphics.Color.Orange);
             }
 
-            if (ragObj[0].RAGStatus == 100)
+            if (ragObj[0].RAGColour == "black")
+            {
+                ragScoreBtn.SetBackgroundColor(Android.Graphics.Color.Orange);
+                ragScoreBtn.SetTextColor(Android.Content.Res.ColorStateList.ValueOf(Android.Graphics.Color.White));
+            }
+
+            if (ragObj[0].RAGColour == "green")
             {
                 ragScoreBtn.SetBackgroundColor(Android.Graphics.Color.Green);
             }
-
         }
 
         //Set button background colour depending on num of alerts

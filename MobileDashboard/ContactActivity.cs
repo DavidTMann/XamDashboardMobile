@@ -29,7 +29,7 @@ namespace MobileDashboard
             string json = GetMyTeamJson();
             //Deserialize json into c# object MyTeam
             var myTeamObj = JsonConvert.DeserializeObject<List<MyTeam>>(json);
-
+            
             //MyTeam listview
             var myTeamListView = FindViewById<ListView>(Resource.Id.myTeamListView);
 
